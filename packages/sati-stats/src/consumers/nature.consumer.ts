@@ -8,18 +8,18 @@ import { InjectConsumer } from 'nestjs-ali-ons';
 import { Consumer } from 'ali-ons';
 import { Model } from "mongoose";
 import { InjectModel } from '@nestjs/mongoose';
-import { Mindfulness } from '../interfaces/mindfulness.interface';
+import { Nature } from '../interfaces/nature.interface';
 
 @Catch()
-@Controller('mindfulness')
-export class MindfulnessConsumer {
+@Controller('nature')
+export class NatureConsumer {
     onModuleInit() {
         this.consumer.subscribe(this.handler.bind(this))
     }
 
     constructor(
-        @InjectConsumer('sati_debug', 'mindfulness') private readonly consumer: Consumer,
-        @InjectModel('Mindfulness') private readonly mindfulnessModel: Model<Mindfulness>
+        @InjectConsumer('sati_debug', 'nature') private readonly consumer: Consumer,
+        @InjectModel('Nature') private readonly natureModel: Model<Nature>
     ) {
     }
 
@@ -33,16 +33,16 @@ export class MindfulnessConsumer {
         console.log(body)
         switch (message.properties.KEYS) {
             case 'favorite':
-                await this.mindfulnessModel.findOneAndUpdate({ _id: body.mindfulnessId }, { $inc: { favorite: 1 } }).exec();
+                await this.natureModel.findOneAndUpdate({ _id: body.natureId }, { $inc: { favorite: 1 } }).exec();
                 break;
             case 'buy':
-                await this.mindfulnessModel.findOneAndUpdate({ _id: body.mindfulnessId }, { $inc: { buy: 1 } }).exec();
+                await this.natureModel.findOneAndUpdate({ _id: body.natureId }, { $inc: { buy: 1 } }).exec();
                 break;
             case 'start':
-                await this.mindfulnessModel.findOneAndUpdate({ _id: body.mindfulnessId }, { $inc: { start: 1 } }).exec();
+                await this.natureModel.findOneAndUpdate({ _id: body.natureId }, { $inc: { start: 1 } }).exec();
                 break;
             case 'finish':
-                await this.mindfulnessModel.findOneAndUpdate({ _id: body.mindfulnessId },
+                await this.natureModel.findOneAndUpdate({ _id: body.natureId },
                     { $inc: { finish: 1, duration: body.duration || 0 } }).exec();
                 break;
             default:

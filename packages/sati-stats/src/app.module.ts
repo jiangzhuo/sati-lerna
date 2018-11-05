@@ -6,6 +6,9 @@ import { MindfulnessSchema } from './schemas/mindfulness.schema';
 import { NatureSchema } from "./schemas/nature.schema";
 import { WanderSchema } from './schemas/wander.schema';
 import { WanderAlbumSchema } from './schemas/wanderAlbum.schema';
+import { NatureConsumer } from "./consumers/nature.consumer";
+import { WanderConsumer } from "./consumers/wander.consumer";
+import { WanderAlbumConsumer } from "./consumers/wanderAlbum.consumer";
 
 const httpclient = require('urllib');
 const logger = {
@@ -59,7 +62,7 @@ const logger = {
             {name: 'WanderAlbum', schema: WanderAlbumSchema, collection: 'wanderAlbum'}
         ], 'resource'),
     ],
-    controllers: [MindfulnessConsumer]
+    controllers: [MindfulnessConsumer, NatureConsumer, WanderConsumer, WanderAlbumConsumer]
 })
 export class ApplicationModule {
     constructor() {
