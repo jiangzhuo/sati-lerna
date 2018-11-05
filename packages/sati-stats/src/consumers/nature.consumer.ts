@@ -33,17 +33,17 @@ export class NatureConsumer {
         console.log(body)
         switch (message.properties.KEYS) {
             case 'favorite':
-                await this.natureModel.findOneAndUpdate({ _id: body.natureId }, { $inc: { favorite: 1 } }).exec();
+                await this.natureModel.findOneAndUpdate({ _id: body.natureId }, { $inc: { "stats.favorite": 1 } }).exec();
                 break;
             case 'buy':
-                await this.natureModel.findOneAndUpdate({ _id: body.natureId }, { $inc: { buy: 1 } }).exec();
+                await this.natureModel.findOneAndUpdate({ _id: body.natureId }, { $inc: { "stats.buy": 1 } }).exec();
                 break;
             case 'start':
-                await this.natureModel.findOneAndUpdate({ _id: body.natureId }, { $inc: { start: 1 } }).exec();
+                await this.natureModel.findOneAndUpdate({ _id: body.natureId }, { $inc: { "stats.start": 1 } }).exec();
                 break;
             case 'finish':
                 await this.natureModel.findOneAndUpdate({ _id: body.natureId },
-                    { $inc: { finish: 1, duration: body.duration || 0 } }).exec();
+                    { $inc: { "stats.finish": 1, "stats.duration": body.duration || 0 } }).exec();
                 break;
             default:
                 console.error('not handled action')

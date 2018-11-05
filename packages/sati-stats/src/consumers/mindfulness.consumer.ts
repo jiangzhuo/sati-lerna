@@ -30,20 +30,19 @@ export class MindfulnessConsumer {
 
     async handler(message) {
         let body = JSON.parse(message.body.toString());
-        console.log(body)
         switch (message.properties.KEYS) {
             case 'favorite':
-                await this.mindfulnessModel.findOneAndUpdate({ _id: body.mindfulnessId }, { $inc: { favorite: 1 } }).exec();
+                await this.mindfulnessModel.findOneAndUpdate({ _id: body.mindfulnessId }, { $inc: { "stats.favorite": 1 } }).exec();
                 break;
             case 'buy':
-                await this.mindfulnessModel.findOneAndUpdate({ _id: body.mindfulnessId }, { $inc: { buy: 1 } }).exec();
+                await this.mindfulnessModel.findOneAndUpdate({ _id: body.mindfulnessId }, { $inc: { "stats.buy": 1 } }).exec();
                 break;
             case 'start':
-                await this.mindfulnessModel.findOneAndUpdate({ _id: body.mindfulnessId }, { $inc: { start: 1 } }).exec();
+                await this.mindfulnessModel.findOneAndUpdate({ _id: body.mindfulnessId }, { $inc: { "stats.start": 1 } }).exec();
                 break;
             case 'finish':
                 await this.mindfulnessModel.findOneAndUpdate({ _id: body.mindfulnessId },
-                    { $inc: { finish: 1, duration: body.duration || 0 } }).exec();
+                    { $inc: { "stats.finish": 1, "stats.duration": body.duration || 0 } }).exec();
                 break;
             default:
                 console.error('not handled action')
