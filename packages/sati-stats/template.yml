@@ -1,0 +1,46 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  sati-stats:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: '统计sati的sls acslog-project-caafda72e6-wamuf'
+      LogConfig:
+        Project: acslog-project-caafda72e6-wamuf
+        Logstore: sati-stats-log
+    sati-docker:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: sati.handler
+        Runtime: nodejs8
+        CodeUri: './'
+        Initializer: sati.initializer
+        Description: '处理sati的log'
+      Events:
+        log-stream:
+          Type: Log
+          Properties:
+            SourceConfig:
+              Logstore: acslog-sati-docker-test-dockertest
+            JobConfig:
+              MaxRetryTime: 1
+              TriggerInterval: 30
+            LogConfig:
+              Project: acslog-project-caafda72e6-wamuf
+              Logstore: trigger-log
+            Enable: true
+
+  acslog-project-caafda72e6-wamuf:
+    Type: 'Aliyun::Serverless::Log'
+    Properties:
+      Description: 'docker的日志地址project'
+    trigger-log:
+      Type: 'Aliyun::Serverless::Log::Logstore'
+      Properties:
+        TTL: 10
+        ShardCount: 1
+    sati-stats-log:
+      Type: 'Aliyun::Serverless::Log::Logstore'
+      Properties:
+        TTL: 10
+        ShardCount: 1

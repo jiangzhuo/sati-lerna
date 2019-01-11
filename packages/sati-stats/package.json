@@ -1,31 +1,29 @@
 {
   "name": "sati-stats",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
-  "repository": "git@github.com:jiangzhuo/sati-stats.git",
-  "author": "jiangzhuo <glmmmmmm@163.com>",
-  "license": "MIT",
   "scripts": {
-    "start": "ts-node src/main.ts",
-    "prestart:prod": "tsc",
-    "start:prod": "node dist/main.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "depoly": "fun depoly"
   },
-  "private": true,
-  "dependencies": {
-    "@nestjs/common": "^5.4.0",
-    "@nestjs/core": "^5.4.0",
-    "@nestjs/mongoose": "^5.2.2",
-    "mongoose": "^5.3.9",
-    "mongoose-int32": "^0.3.1",
-    "nestjs-ali-ons": "^1.0.10",
-    "reflect-metadata": "^0.1.12",
-    "rxjs": "^6.3.3",
-    "typescript": "^3.1.6",
-    "urllib": "^2.31.1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jiangzhuo/sati-stats.git"
   },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jiangzhuo/sati-stats/issues"
+  },
+  "homepage": "https://github.com/jiangzhuo/sati-stats#readme",
   "devDependencies": {
-    "@types/mongodb": "^3.1.14",
-    "@types/mongoose": "^5.3.0",
-    "@types/node": "^10.12.2"
+    "@alicloud/fun": "^2.8.0"
+  },
+  "dependencies": {
+    "@alicloud/acm-sdk": "^1.0.1",
+    "@types/node": "^10.12.18",
+    "aliyun-sdk": "^1.12.0",
+    "monk": "^6.0.6"
   }
 }
