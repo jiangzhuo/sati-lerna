@@ -24,6 +24,7 @@
     "@alicloud/acm-sdk": "^1.0.1",
     "@types/node": "^10.12.18",
     "aliyun-sdk": "^1.12.0",
+    "lodash": "^4.17.11",
     "monk": "^6.0.6"
   }
 }

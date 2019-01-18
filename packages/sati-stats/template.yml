@@ -21,7 +21,7 @@ Resources:
           Type: Log
           Properties:
             SourceConfig:
-              Logstore: acslog-sati-docker-test-dockertest
+              Logstore: acslog-sati-compose-sati
             JobConfig:
               MaxRetryTime: 1
               TriggerInterval: 30
