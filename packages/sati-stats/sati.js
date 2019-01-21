@@ -34,8 +34,8 @@ module.exports.handler = asyncHandlerWrap(async function (event, context) {
     let xLogCursor = event.source.beginCursor;
 
     let normalRecord = [];
+    let userRecord = [];
     while (xLogCursor !== event.source.endCursor) {
-        console.log(xLogCursor ,event.source.endCursor)
         let res = await util.promisify(sls.batchGetLogs).bind(sls)({
             projectName: event.source.projectName,
             logStoreName: event.source.logstoreName,
@@ -51,7 +51,7 @@ module.exports.handler = asyncHandlerWrap(async function (event, context) {
                     obj[param.key] = param.value;
                     return obj
                 }, {});
-                if (payload.namespace === 'NEST' && (['DISCOUNT', 'HOME', 'MINDFULNESS', 'MINDFULNESSALBUM', 'NATURE', 'NATUREALBUM', 'WANDER', 'WANDERALBUM', 'SCENE', 'COUPON', 'USER'].includes(payload.module))) {
+                if (payload.namespace === 'NEST' && (['DISCOUNT', 'HOME', 'MINDFULNESS', 'MINDFULNESSALBUM', 'NATURE', 'NATUREALBUM', 'WANDER', 'WANDERALBUM', 'SCENE', 'COUPON'].includes(payload.module))) {
                     // ${context.user && context.user.id}\t${context.udid}\t${context.clientIp}\t${context.operationName}\t${resolveInfo.fieldName}\t${JSON.stringify(data)}
                     normalRecord.push({
                         timestamp: payload.timestamp,
@@ -66,6 +66,36 @@ module.exports.handler = asyncHandlerWrap(async function (event, context) {
                         other: payload.__column10__,
                     })
                 }
+                if (payload.namespace === 'NEST' && (['USER'].includes(payload.module))) {
+                    // ${context.user && context.user.id}\t${context.udid}\t${context.clientIp}\t${context.operationName}\t${resolveInfo.fieldName}\t${JSON.stringify(data)}
+                    if (payload.__column9__ === 'changeBalanceByAdmin') {
+                        normalRecord.push({
+                            timestamp: payload.timestamp,
+                            server: payload.server,
+                            namespace: payload.namespace,
+                            module: payload.module,
+                            userId: payload.__column5__,
+                            uuid: payload.__column6__,
+                            clientIp: payload.__column7__,
+                            operationName: payload.__column8__,
+                            fieldName: payload.__column9__,
+                            other: payload.__column10__,
+                        })
+                    } else {
+                        userRecord.push({
+                            timestamp: payload.timestamp,
+                            server: payload.server,
+                            namespace: payload.namespace,
+                            module: payload.module,
+                            userId: payload.__column5__,
+                            uuid: payload.__column6__,
+                            clientIp: payload.__column7__,
+                            operationName: payload.__column8__,
+                            fieldName: payload.__column9__,
+                            other: payload.__column10__,
+                        })
+                    }
+                }
             })
         });
         if (xLogCursor === res.headers["x-log-cursor"])
@@ -74,6 +104,9 @@ module.exports.handler = asyncHandlerWrap(async function (event, context) {
     }
 
     const operationCol = db.get('operation');
-    const insertResult = await operationCol.insert(normalRecord);
-    return `operation inserted ${insertResult.insertedCount}`;
+    const operationResult = await operationCol.insert(normalRecord);
+    console.log(`operation inserted ${operationResult.insertedCount}`);
+    const userStatCol = db.get('userStat');
+    const userStatResult = await userStatCol.insert(userRecord);
+    return `operation inserted ${userStatResult.insertedCount}`;
 });
