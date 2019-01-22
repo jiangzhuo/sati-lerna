@@ -5,6 +5,7 @@ import { UserStatsSchema } from './schemas/userStats.schema';
 import { UserStatsService } from './services/userStats.service';
 import { OperationSchema } from './schemas/operation.schema';
 import { OperationService } from './services/operation.service';
+import { UserSchema } from './schemas/user.schema';
 
 import { MoleculerModule } from 'nestjs-moleculer';
 import { UserStatsController } from './controllers/userStats.controller';
@@ -26,6 +27,7 @@ import * as jaeger from 'moleculer-jaeger';
             { connectionName: 'sati', useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true }),
         MongooseModule.forFeature([{ name: 'UserStats', schema: UserStatsSchema, collection: 'userStats' }], 'sati'),
         MongooseModule.forFeature([{ name: 'Operation', schema: OperationSchema, collection: 'operation' }], 'sati'),
+        MongooseModule.forFeature([{ name: 'User', schema: UserSchema, collection: 'user' }], 'sati'),
     ],
     controllers: [
         UserStatsController,

@@ -23,7 +23,11 @@ export class UserStatsController extends Service {
                 upperCase: true
             },
             actions: {
-                loginCount: this.loginBySMSCode
+                loginCount: this.loginCount,
+                registerCount: this.registerCount,
+                verificationCodeCount: this.verificationCodeCount,
+                renewTokenCount: this.renewTokenCount,
+                userCount: this.userCount,
             },
             created: this.serviceCreated,
             started: this.serviceStarted,
@@ -43,7 +47,23 @@ export class UserStatsController extends Service {
         this.logger.info("user service stopped.");
     }
 
-    async loginBySMSCode(ctx: Context) {
-        return { data: await this.userStatsService.loginCount(1, 2548080174858) };
+    async userCount(ctx: Context) {
+        return { data: await this.userStatsService.userCount(ctx.params.from, ctx.params.to) };
+    }
+
+    async loginCount(ctx: Context) {
+        return { data: await this.userStatsService.loginCount(ctx.params.from, ctx.params.to) }
+    }
+
+    async registerCount(ctx: Context) {
+        return { data: await this.userStatsService.registerCount(ctx.params.from, ctx.params.to) };
+    }
+
+    async verificationCodeCount(ctx: Context) {
+        return { data: await this.userStatsService.verificationCodeCount(ctx.params.from, ctx.params.to) };
+    }
+
+    async renewTokenCount(ctx: Context) {
+        return { data: await this.userStatsService.renewTokenCount(ctx.params.from, ctx.params.to) };
     }
 }

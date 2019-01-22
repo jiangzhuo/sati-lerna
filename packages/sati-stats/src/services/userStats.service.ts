@@ -7,18 +7,27 @@ import { Errors } from 'moleculer';
 import MoleculerError = Errors.MoleculerError;
 import { Operation } from '../interfaces/operation.interface';
 import { UserStats } from '../interfaces/userStats.interface';
+import { User } from '../interfaces/user.interface';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class UserStatsService {
     constructor(
         @InjectModel('Operation') private readonly operationModel: Model<Operation>,
         @InjectModel('UserStats') private readonly userStatsModel: Model<UserStats>,
+        @InjectModel('User') private readonly userModel: Model<User>,
         @InjectConnection('sati') private readonly resourceClient: Connection,
     ) {
     }
 
-    async userCount(): Promise<number> {
-        return 1;
+    async userCount(from: number, to: number): Promise<number> {
+        let result = await this.userModel.count({
+            _id: {
+                $gte: ObjectId.createFromTime(from),
+                $lte: ObjectId.createFromTime(to)
+            }
+        });
+        return result
     }
 
     async loginCount(from: number, to: number): Promise<any[]> {
@@ -29,12 +38,17 @@ export class UserStatsService {
                         "namespace": "NEST",
                         "module": "USER",
                         "operationName": { $in: ["loginByMobileAndPassword", "loginBySMSCode"] },
-                        timestamp: { $gte: from, $lte: to }
+                        timestamp: { $gte: from * 1000, $lte: to * 1000 }
                     }
                 },
                 {
                     $group: {
-                        _id: { namespace: "$namespace", module: "$module", fieldName: "$fieldName" },
+                        _id: {
+                            namespace: "$namespace",
+                            module: "$module",
+                            operationName: "$operationName",
+                            fieldName: "$fieldName"
+                        },
                         userIds: { $addToSet: '$userId' }
                     }
                 },
@@ -57,12 +71,17 @@ export class UserStatsService {
                         "namespace": "NEST",
                         "module": "USER",
                         "operationName": { $in: ["registerBySMSCode"] },
-                        timestamp: { $gte: from, $lte: to }
+                        timestamp: { $gte: from * 1000, $lte: to * 1000 }
                     }
                 },
                 {
                     $group: {
-                        _id: { namespace: "$namespace", module: "$module", fieldName: "$fieldName" },
+                        _id: {
+                            namespace: "$namespace",
+                            module: "$module",
+                            operationName: "$operationName",
+                            fieldName: "$fieldName"
+                        },
                         mobiles: { $addToSet: '$mobile' }
                     }
                 },
@@ -85,12 +104,17 @@ export class UserStatsService {
                         "namespace": "NEST",
                         "module": "USER",
                         "operationName": { $in: ["sendLoginVerificationCode", "sendRegisterVerificationCode"] },
-                        timestamp: { $gte: from, $lte: to }
+                        timestamp: { $gte: from * 1000, $lte: to * 1000 }
                     }
                 },
                 {
                     $group: {
-                        _id: { namespace: "$namespace", module: "$module", fieldName: "$fieldName" },
+                        _id: {
+                            namespace: "$namespace",
+                            module: "$module",
+                            operationName: "$operationName",
+                            fieldName: "$fieldName"
+                        },
                         mobiles: { $addToSet: '$mobile' }
                     }
                 },
@@ -113,12 +137,17 @@ export class UserStatsService {
                         "namespace": "NEST",
                         "module": "USER",
                         "operationName": { $in: ["renewToken"] },
-                        timestamp: { $gte: from, $lte: to }
+                        timestamp: { $gte: from * 1000, $lte: to * 1000 }
                     }
                 },
                 {
                     $group: {
-                        _id: { namespace: "$namespace", module: "$module", fieldName: "$fieldName" },
+                        _id: {
+                            namespace: "$namespace",
+                            module: "$module",
+                            operationName: "$operationName",
+                            fieldName: "$fieldName"
+                        },
                         userIds: { $addToSet: '$userId' }
                     }
                 },
