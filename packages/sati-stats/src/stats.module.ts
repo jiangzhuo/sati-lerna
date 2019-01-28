@@ -9,6 +9,7 @@ import { UserSchema } from './schemas/user.schema';
 
 import { MoleculerModule } from 'nestjs-moleculer';
 import { UserStatsController } from './controllers/userStats.controller';
+import { OperationController } from './controllers/operation.controller';
 import * as jaeger from 'moleculer-jaeger';
 
 @Module({
@@ -31,6 +32,7 @@ import * as jaeger from 'moleculer-jaeger';
     ],
     controllers: [
         UserStatsController,
+        OperationController,
     ],
     providers: [
         UserStatsService,

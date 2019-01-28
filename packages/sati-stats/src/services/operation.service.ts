@@ -7,6 +7,8 @@ import { Errors } from 'moleculer';
 import MoleculerError = Errors.MoleculerError;
 import { Operation } from '../interfaces/operation.interface';
 import { UserStats } from '../interfaces/userStats.interface';
+import { ObjectId } from 'mongodb';
+import { isEmpty } from 'lodash';
 
 @Injectable()
 export class OperationService {
@@ -17,19 +19,19 @@ export class OperationService {
     ) {
     }
 
-    async userCount(): Promise<number> {
-        return 1;
+    async countOperation(page: number, limit: number, namespace = 'NEST', module: string, operationName: string, fieldName: string) {
+        let query = { namespace: namespace };
+        if (!isEmpty(fieldName)) {
+            query['fieldName'] = fieldName;
+        }
+        return await this.operationModel.countDocuments(query);
     }
 
-    async loginCount(from: number, to: number): Promise<number> {
-        return 1;
-    }
-
-    async registerCount(): Promise<number> {
-        return 1;
-    }
-
-    async renewTokenCount(): Promise<number> {
-        return 1;
+    async getOperation(page: number, limit: number, namespace = 'NEST', module: string, operationName: string, fieldName: string): Promise<any[]> {
+        let query = { namespace: namespace };
+        if (!isEmpty(fieldName)) {
+            query['fieldName'] = fieldName;
+        }
+        return await this.operationModel.find(query).sort({ timestamp: -1 }).skip((page - 1) * limit).limit(limit).exec();
     }
 }
