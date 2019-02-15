@@ -1,7 +1,27 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "test": "jest --config=jest.json",
+    "test:watch": "jest --watch --config=jest.json",
+    "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",
+    "e2e": "jest --config=test/e2e/jest-e2e.json --detectOpenHandles",
+    "e2e:watch": "jest --watch --config=test/e2e/jest-e2e.json"
+  },
   "devDependencies": {
-    "lerna": "^3.13.0"
+    "@nestjs/common": "^5.7.2",
+    "@nestjs/core": "^5.7.2",
+    "@nestjs/testing": "^5.7.2",
+    "@types/jest": "^24.0.5",
+    "@types/node": "^11.9.4",
+    "jest": "^24.1.0",
+    "lerna": "^3.13.0",
+    "mongo-unit": "^1.4.4",
+    "reflect-metadata": "^0.1.13",
+    "supertest": "^3.4.2",
+    "ts-jest": "^23.10.5"
+  },
+  "dependencies": {
+    "typescript": "^3.3.3"
   }
 }
