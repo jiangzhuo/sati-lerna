@@ -1,6 +1,6 @@
 {
     "name": "sati-stats",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "The stat module for sta application.",
     "scripts": {
         "start": "ts-node -r tsconfig-paths/register src/main.ts",
