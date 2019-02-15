@@ -1,6 +1,6 @@
 {
     "name": "sati-user",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "The user module for sta application.",
     "scripts": {
         "start": "ts-node -r tsconfig-paths/register src/main.ts",
