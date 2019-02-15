@@ -9,7 +9,8 @@
         "debug:watch": "nodemon --config nodemon-debug.json",
         "check": "tslint -p tsconfig.json -c tslint.json",
         "fix": "tslint -p tsconfig.json -c tslint.json --fix",
-        "build": "node --max_old_space_size=4096 ./node_modules/gulp/bin/gulp.js build"
+        "build": "tsc",
+        "build:docker": "npm run build;docker build -t sati-user -t sati-user:$(node -p \"require('./package.json').version\") ./"
     },
     "author": "jiangzhuo",
     "license": "Apache-2.0",
