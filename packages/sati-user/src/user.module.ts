@@ -12,7 +12,6 @@ import { UserService } from './services/user.service';
 import { AccountSchema } from './schemas/account.schema';
 
 import { CryptoUtil } from './utils/crypto.util';
-import { ElasticsearchModule } from '@nestjs/elasticsearch';
 
 import { MoleculerModule } from 'nestjs-moleculer';
 import { UserController } from './controllers/user.controller';
