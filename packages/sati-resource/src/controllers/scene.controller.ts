@@ -58,11 +58,11 @@ export class SceneController extends Service {
         this.logger.info("nature service created.");
     }
 
-    serviceStarted() {
+    async serviceStarted() {
         this.logger.info("nature service started.");
     }
 
-    serviceStopped() {
+    async serviceStopped() {
         this.logger.info("nature service stopped.");
     }
 

@@ -65,11 +65,11 @@ export class HomeController extends Service {
         this.logger.info("home service created.");
     }
 
-    serviceStarted() {
+    async serviceStarted() {
         this.logger.info("home service started.");
     }
 
-    serviceStopped() {
+    async serviceStopped() {
         this.logger.info("home service stopped.");
     }
 

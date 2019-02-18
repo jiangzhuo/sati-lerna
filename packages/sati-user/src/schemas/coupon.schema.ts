@@ -1,8 +1,8 @@
-import * as mongoose from 'mongoose';
+import { Schema, Types } from 'mongoose';
 import * as Int32 from "mongoose-int32";
 
-const ObjectId = mongoose.Schema.Types.ObjectId;
-export const CouponSchema = new mongoose.Schema({
+const ObjectId = Schema.Types.ObjectId;
+export const CouponSchema = new Schema({
     // id包括了时间戳、随机数和计数器足够生成
     couponCode: String, // 算出来的兑换码
     value: Number, // 影响多少balance

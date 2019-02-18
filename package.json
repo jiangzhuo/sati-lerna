@@ -13,15 +13,19 @@
     "@nestjs/core": "^5.7.2",
     "@nestjs/testing": "^5.7.2",
     "@types/jest": "^24.0.5",
+    "@types/mongoose": "^5.3.17",
     "@types/node": "^11.9.4",
     "jest": "^24.1.0",
     "lerna": "^3.13.0",
-    "mongo-unit": "^1.4.4",
+    "moleculer": "^0.13.6",
+    "mongodb-memory-server": "^3.1.1",
     "reflect-metadata": "^0.1.13",
     "supertest": "^3.4.2",
     "ts-jest": "^23.10.5"
   },
   "dependencies": {
+    "mongodb": "^3.1.13",
+    "mongoose": "^5.4.13",
     "typescript": "^3.3.3"
   }
 }

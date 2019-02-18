@@ -11,7 +11,6 @@ export class MindfulnessController extends Service {
         @Inject(MindfulnessService) private readonly mindfulnessService: MindfulnessService
     ) {
         super(broker);
-
         this.parseServiceSchema({
             name: "mindfulness",
             //version: "v2",
@@ -55,11 +54,11 @@ export class MindfulnessController extends Service {
         this.logger.info("mindfulness service created.");
     }
 
-    serviceStarted() {
+    async serviceStarted() {
         this.logger.info("mindfulness service started.");
     }
 
-    serviceStopped() {
+    async serviceStopped() {
         this.logger.info("mindfulness service stopped.");
     }
 

@@ -1,7 +1,7 @@
-import * as mongoose from 'mongoose';
+import { Schema, Types } from 'mongoose';
 
-const ObjectId = mongoose.Schema.Types.ObjectId;
-export const AccountSchema = new mongoose.Schema({
+const ObjectId = Schema.Types.ObjectId;
+export const AccountSchema = new Schema({
     userId: ObjectId,
     value: Number,
     afterBalance: Number,

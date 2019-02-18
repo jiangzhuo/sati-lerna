@@ -1,7 +1,7 @@
-import * as mongoose from 'mongoose';
+import { Schema, Types } from 'mongoose';
 
-const ObjectId = mongoose.Schema.Types.ObjectId;
-export const MindfulnessRecordSchema = new mongoose.Schema({
+const ObjectId = Schema.Types.ObjectId;
+export const MindfulnessRecordSchema = new Schema({
     userId: ObjectId,
     mindfulnessId: ObjectId,
     favorite: { type: Number, default: 0 }, // 是否收藏 偶数代表没有收藏 奇数代表已经收藏

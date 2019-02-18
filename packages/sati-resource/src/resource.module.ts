@@ -89,11 +89,18 @@ import * as jaeger from 'moleculer-jaeger';
         // MongooseModule.forFeature([{ name: 'User', schema: UserSchema, collection: 'user' }], 'user')
     ],
     controllers: [
-        // MindfulnessGrpcController,
-        // NatureGrpcController,
-        // WanderGrpcController,
-        // SceneGrpcController,
-        // HomeGrpcController,
+        // MindfulnessController,
+        // MindfulnessAlbumController,
+        // NatureController,
+        // NatureAlbumController,
+        // WanderController,
+        // WanderAlbumController,
+        // SceneController,
+        // HomeController,
+        // DiscountController,
+        // JaegerController
+    ],
+    providers: [
         MindfulnessController,
         MindfulnessAlbumController,
         NatureController,
@@ -103,9 +110,6 @@ import * as jaeger from 'moleculer-jaeger';
         SceneController,
         HomeController,
         DiscountController,
-        // JaegerController
-    ],
-    providers: [
         MindfulnessService,
         MindfulnessAlbumService,
         NatureService,

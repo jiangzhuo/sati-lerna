@@ -68,11 +68,11 @@ export class WanderAlbumController extends Service {
         this.logger.info("wanderAlbum service created.");
     }
 
-    serviceStarted() {
+    async serviceStarted() {
         this.logger.info("wanderAlbum service started.");
     }
 
-    serviceStopped() {
+    async serviceStopped() {
         this.logger.info("wanderAlbum service stopped.");
     }
 

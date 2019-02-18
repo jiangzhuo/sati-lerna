@@ -5,7 +5,7 @@ import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 import * as cc from 'coupon-code';
 
 // import { ObjectId } from 'bson';
-import * as mongoose from 'mongoose';
+import { Schema, Types } from 'mongoose';
 import * as moment from 'moment';
 import { Errors } from 'moleculer';
 import MoleculerError = Errors.MoleculerError;

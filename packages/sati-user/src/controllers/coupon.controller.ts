@@ -44,11 +44,11 @@ export class CouponController extends Service {
         this.logger.info("coupon service created.");
     }
 
-    serviceStarted() {
+    async serviceStarted() {
         this.logger.info("coupon service started.");
     }
 
-    serviceStopped() {
+    async serviceStopped() {
         this.logger.info("coupon service stopped.");
     }
 

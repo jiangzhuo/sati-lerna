@@ -1,7 +1,7 @@
-import * as mongoose from 'mongoose';
+import { Schema, Types } from 'mongoose';
 
-const ObjectId = mongoose.Schema.Types.ObjectId;
-export const deviceSchema = new mongoose.Schema({
+const ObjectId = Schema.Types.ObjectId;
+export const deviceSchema = new Schema({
     userId: ObjectId,
     udid: String,
     clientIp: String,

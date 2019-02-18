@@ -32,9 +32,6 @@ async function bootstrap() {
     // const allConfigs = await acm.getConfigs();
     const allConfigs = [
         { dataId: 'SENTRY_DSN', group: 'sati' },
-        { dataId: 'SSL_PRIVATE_KEY', group: 'sati' },
-        { dataId: 'SSL_CERTIFICATE', group: 'sati' },
-        { dataId: 'SSL_CA', group: 'sati' },
         { dataId: 'HTTP_PORT', group: 'sati' },
         { dataId: 'HTTPS_PORT', group: 'sati' },
         { dataId: 'LOG_LEVEL', group: 'sati' },

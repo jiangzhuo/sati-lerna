@@ -11,7 +11,7 @@ import { isEmpty, isNumber, isArray, isBoolean } from 'lodash';
 // import { __ as t } from "i18n";
 import * as Moleculer from "moleculer";
 import MoleculerError = Moleculer.Errors.MoleculerError;
-import { User } from 'src/interfaces/user.interface';
+import { User } from '../interfaces/user.interface';
 import { Account } from "../interfaces/account.interface";
 import * as nodejieba from "nodejieba";
 

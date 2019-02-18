@@ -31,10 +31,12 @@ import * as jaeger from 'moleculer-jaeger';
         MongooseModule.forFeature([{ name: 'User', schema: UserSchema, collection: 'user' }], 'sati'),
     ],
     controllers: [
-        UserStatsController,
-        OperationController,
+        // UserStatsController,
+        // OperationController,
     ],
     providers: [
+        UserStatsController,
+        OperationController,
         UserStatsService,
         OperationService
     ],
@@ -51,5 +53,7 @@ export class StatsModule implements OnModuleInit {
     }
 
     async onModuleInit() {
+
+        console.log(1111111111111)
     }
 }

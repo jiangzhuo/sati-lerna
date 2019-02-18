@@ -68,11 +68,11 @@ export class MindfulnessAlbumController extends Service {
         this.logger.info("mindfulnessAlbum service created.");
     }
 
-    serviceStarted() {
+    async serviceStarted() {
         this.logger.info("mindfulnessAlbum service started.");
     }
 
-    serviceStopped() {
+    async serviceStopped() {
         this.logger.info("mindfulnessAlbum service stopped.");
     }
 

@@ -26,11 +26,11 @@ export class JaegerController extends Service {
         this.logger.info("jaeger service created.");
     }
 
-    serviceStarted() {
+    async serviceStarted() {
         this.logger.info("jaeger service started.");
     }
 
-    serviceStopped() {
+    async serviceStopped() {
         this.logger.info("jaeger service stopped.");
     }
 }

@@ -44,8 +44,6 @@ async function bootstrap() {
     const allConfigs = [
         { dataId: 'SENTRY_DSN', group: 'sati' },
         { dataId: 'LOG_LEVEL', group: 'sati' },
-        { dataId: 'ELASTICSEARCH_HOST', group: 'sati' },
-        { dataId: 'ELASTICSEARCH_HTTP_AUTH', group: 'sati' },
         { dataId: 'MONGODB_CONNECTION_STR', group: 'sati' },
         { dataId: 'SMS_ACCESS_KEY_ID', group: 'sati' },
         { dataId: 'SMS_ACCESS_KEY_SECRET', group: 'sati' },

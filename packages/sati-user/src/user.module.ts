@@ -1,11 +1,8 @@
 import { DynamicModule, Inject, Module, OnModuleInit } from '@nestjs/common';
-// import { APP_INTERCEPTOR } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
-// import { configure as i18nConfigure } from 'i18n';
 
 import { AuthService } from './auth/auth.service';
 
-// import { UserGrpcController } from './controllers/user.grpc.controller';
 import { UserSchema } from './schemas/user.schema';
 import { UserService } from './services/user.service';
 
@@ -27,7 +24,7 @@ import * as jaeger from 'moleculer-jaeger';
             // logger: bindings => new Logger(),
             metrics: true,
             transporter: process.env.TRANSPORTER,
-            hotReload: true,
+            // hotReload: true,
             cacher: "Memory",
             logLevel: process.env.LOG_LEVEL
         }),
@@ -44,11 +41,13 @@ import * as jaeger from 'moleculer-jaeger';
         MongooseModule.forFeature([{ name: 'Coupon', schema: CouponSchema, collection: 'coupon' }], 'sati'),
     ],
     controllers: [
-        UserController,
-        CouponController,
+        // UserController,
+        // CouponController,
         // JaegerController
     ],
     providers: [
+        UserController,
+        CouponController,
         AuthService,
         UserService,
         CouponService,
@@ -57,9 +56,7 @@ import * as jaeger from 'moleculer-jaeger';
     exports: []
 })
 export class UserModule implements OnModuleInit {
-    constructor(
-        @Inject(UserService) private readonly userService: UserService
-    ) {
+    constructor() {
     }
 
     static forRoot(): DynamicModule {
@@ -69,7 +66,7 @@ export class UserModule implements OnModuleInit {
     }
 
     async onModuleInit() {
-        // await this.createSuperAdmin();
+        console.log(2222222)
     }
 
     // /**

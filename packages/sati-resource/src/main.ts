@@ -47,9 +47,6 @@ async function bootstrap() {
     // const allConfigs = await acm.getConfigs();
     const allConfigs = [
         { dataId: 'SENTRY_DSN', group: 'sati' },
-        { dataId: 'ONS_ACCESS_KEY_ID', group: 'sati' },
-        { dataId: 'ONS_ACCESS_KEY_SECRET', group: 'sati' },
-        { dataId: 'ONS_PRODUCER_GROUP', group: 'sati' },
         { dataId: 'LOG_LEVEL', group: 'sati' },
         { dataId: 'MONGODB_CONNECTION_STR', group: 'sati' },
         { dataId: 'TRANSPORTER', group: 'sati' }

@@ -63,11 +63,11 @@ export class NatureAlbumController extends Service {
         this.logger.info("natureAlbum service created.");
     }
 
-    serviceStarted() {
+    async serviceStarted() {
         this.logger.info("natureAlbum service started.");
     }
 
-    serviceStopped() {
+    async serviceStopped() {
         this.logger.info("natureAlbum service stopped.");
     }
 

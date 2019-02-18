@@ -83,11 +83,11 @@ export class UserController extends Service {
         this.logger.info("user service created.");
     }
 
-    serviceStarted() {
+    async serviceStarted() {
         this.logger.info("user service started.");
     }
 
-    serviceStopped() {
+    async serviceStopped() {
         this.logger.info("user service stopped.");
     }
 

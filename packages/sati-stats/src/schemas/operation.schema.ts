@@ -1,6 +1,6 @@
-import * as mongoose from 'mongoose';
+import { Schema, Types } from 'mongoose';
 
-export const OperationSchema = new mongoose.Schema({
+export const OperationSchema = new Schema({
     timestamp: Number,
     server: String,
     namespace: String,

@@ -36,11 +36,11 @@ export class DiscountController extends Service {
         this.logger.info("discount service created.");
     }
 
-    serviceStarted() {
+    async serviceStarted() {
         this.logger.info("discount service started.");
     }
 
-    serviceStopped() {
+    async serviceStopped() {
         this.logger.info("discount service stopped.");
     }
 

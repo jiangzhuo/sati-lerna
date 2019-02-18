@@ -21,7 +21,7 @@ import { UploadModule } from './modules/upload/upload.module';
         UploadModule,
         ResourceModule,
         StatsModule,
-        UserModule.forRoot(),
+        UserModule,
     ],
     providers: [
         {

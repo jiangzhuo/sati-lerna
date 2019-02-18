@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
         "allowJs": false,
+        "allowSyntheticDefaultImports": true,
         "baseUrl": "./",
         "declaration": true,
-        "esModuleInterop": true,
+        "esModuleInterop": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "module": "commonjs",

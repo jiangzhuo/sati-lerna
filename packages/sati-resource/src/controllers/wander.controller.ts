@@ -70,11 +70,11 @@ export class WanderController extends Service {
         this.logger.info("wander service created.");
     }
 
-    serviceStarted() {
+    async serviceStarted() {
         this.logger.info("wander service started.");
     }
 
-    serviceStopped() {
+    async serviceStopped() {
         this.logger.info("wander service stopped.");
     }
 

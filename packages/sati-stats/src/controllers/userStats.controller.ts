@@ -36,15 +36,15 @@ export class UserStatsController extends Service {
     }
 
     serviceCreated() {
-        this.logger.info("user service created.");
+        this.logger.info("userStats service created.");
     }
 
-    serviceStarted() {
-        this.logger.info("user service started.");
+    async serviceStarted() {
+        this.logger.info("userStats service started.");
     }
 
-    serviceStopped() {
-        this.logger.info("user service stopped.");
+    async serviceStopped() {
+        this.logger.info("userStats service stopped.");
     }
 
     async userCount(ctx: Context) {

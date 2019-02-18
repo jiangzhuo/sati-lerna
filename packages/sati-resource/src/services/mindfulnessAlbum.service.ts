@@ -5,7 +5,7 @@ import * as moment from "moment";
 import { isArray, isBoolean, isEmpty, isNumber } from 'lodash';
 import * as Moleculer from "moleculer";
 import { MindfulnessAlbum } from "../interfaces/mindfulnessAlbum.interface";
-import { MindfulnessAlbumRecord } from 'src/interfaces/mindfulnessAlbumRecord.interface';
+import { MindfulnessAlbumRecord } from '../interfaces/mindfulnessAlbumRecord.interface';
 import MoleculerError = Moleculer.Errors.MoleculerError;
 import { User } from "../interfaces/user.interface";
 import { Account } from "../interfaces/account.interface";

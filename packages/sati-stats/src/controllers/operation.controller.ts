@@ -32,15 +32,15 @@ export class OperationController extends Service {
     }
 
     serviceCreated() {
-        this.logger.info("user service created.");
+        this.logger.info("operation service created.");
     }
 
-    serviceStarted() {
-        this.logger.info("user service started.");
+    async serviceStarted() {
+        this.logger.info("operation service started.");
     }
 
-    serviceStopped() {
-        this.logger.info("user service stopped.");
+    async serviceStopped() {
+        this.logger.info("operation service stopped.");
     }
 
     async getOperation(ctx: Context) {

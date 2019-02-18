@@ -1,16 +1,16 @@
 {
     "compilerOptions": {
         "allowJs": false,
+        "allowSyntheticDefaultImports": true,
         "baseUrl": "./",
         "declaration": true,
-        "esModuleInterop": true,
+        "esModuleInterop": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "module": "commonjs",
         "noImplicitAny": false,
         "noLib": false,
         "lib": [
-            "dom",
             "es2017",
             "esnext.asynciterable"
         ],

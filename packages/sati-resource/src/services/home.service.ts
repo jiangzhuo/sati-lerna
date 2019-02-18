@@ -4,11 +4,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { isArray, isEmpty, isNumber } from 'lodash';
 import * as moment from "moment";
-import { Mindfulness } from 'src/interfaces/mindfulness.interface';
-import { Nature } from 'src/interfaces/nature.interface';
-import { Wander } from 'src/interfaces/wander.interface';
+import { Mindfulness } from '../interfaces/mindfulness.interface';
+import { Nature } from '../interfaces/nature.interface';
+import { Wander } from '../interfaces/wander.interface';
 import { WanderAlbum } from "../interfaces/wanderAlbum.interface";
-import { NatureAlbum } from 'src/interfaces/natureAlbum.interface';
+import { NatureAlbum } from '../interfaces/natureAlbum.interface';
 import { MindfulnessAlbum } from "../interfaces/mindfulnessAlbum.interface";
 
 @Injectable()

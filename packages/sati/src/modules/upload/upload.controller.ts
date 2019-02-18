@@ -1,7 +1,7 @@
 import { Controller, FileInterceptor, Post, UploadedFile, UseInterceptors, Get } from '@nestjs/common';
 import OSS from 'ali-oss';
 import hasha from 'hasha';
-import mime from 'mime';
+import { getExtension } from 'mime';
 
 import { ErrorsInterceptor } from '../../common/interceptors';
 // import { Configurable, ConfigParam, ConfigService } from 'nestjs-config';
@@ -33,7 +33,7 @@ export class UploadController {
         });
         // let hash = hasha(file.buffer, { algorithm: 'md5' });
         // console.log(hash);
-        const filename = `avatar/${hasha(file.buffer, { algorithm: 'md5' })}.${mime.getExtension(file.mimetype)}`;
+        const filename = `avatar/${hasha(file.buffer, { algorithm: 'md5' })}.${getExtension(file.mimetype)}`;
         await client.put(filename, file.buffer);
         return { code: 200, message: 'upload avatar success', data: await client.generateObjectUrl(filename, process.env.OSS_BASE_URL) };
     }
@@ -50,7 +50,7 @@ export class UploadController {
         });
         // let hash = hasha(file.buffer, { algorithm: 'md5' });
         // console.log(hash);
-        const filename = `background/${hasha(file.buffer, { algorithm: 'md5' })}.${mime.getExtension(file.mimetype)}`;
+        const filename = `background/${hasha(file.buffer, { algorithm: 'md5' })}.${getExtension(file.mimetype)}`;
         await client.put(filename, file.buffer);
         return { code: 200, message: 'upload background success', data: await client.generateObjectUrl(filename, process.env.OSS_BASE_URL) };
     }
@@ -67,7 +67,7 @@ export class UploadController {
         });
         // let hash = hasha(file.buffer, { algorithm: 'md5' });
         // console.log(hash);
-        const filename = `audio/${hasha(file.buffer, { algorithm: 'md5' })}.${mime.getExtension(file.mimetype)}`;
+        const filename = `audio/${hasha(file.buffer, { algorithm: 'md5' })}.${getExtension(file.mimetype)}`;
         await client.put(filename, file.buffer);
         return { code: 200, message: 'upload audio success', data: await client.generateObjectUrl(filename, process.env.BASE_URL) };
     }
