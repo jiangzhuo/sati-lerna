@@ -3,6 +3,9 @@ import {INestApplication, INestApplicationContext} from '@nestjs/common';
 import * as supertest from 'supertest';
 import { ServiceBroker } from 'moleculer';
 
+const mutations = require('./gql/mutations');
+const queries = require('./gql/queries');
+
 describe('Resource', () => {
     let app: INestApplication;
     let broker: ServiceBroker;
@@ -36,10 +39,16 @@ describe('Resource', () => {
         it(`sayHomeHello`, async () => {
             // return true;
 
+            // const res = await supertest(app.getHttpServer())
+            //     .post('/graphql')
+            //     .send({
+            //         query: 'query sayHomeHello {  sayHomeHello(name:"jiangzhuo") {    code    message data  }}',
+            //     });
             const res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .send({
-                    query: 'query sayHomeHello {  sayHomeHello(name:"jiangzhuo") {    code    message data  }}',
+                    query: queries.sayHomeHello,
+                    variables: {name: "jiangzhuo"}
                 });
             expect(res.status).toBe(200);
             expect(JSON.parse(res.text).data.sayHomeHello.code).toBe(200);
