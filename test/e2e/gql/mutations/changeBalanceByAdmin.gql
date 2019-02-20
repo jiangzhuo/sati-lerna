@@ -1,0 +1,17 @@
+mutation changeBalanceByAdmin($userId: String!, $changeValue: Int!, $extraInfo: String!){
+    changeBalanceByAdmin(userId: $userId, changeValue: $changeValue, extraInfo: $extraInfo){
+        code
+        message
+        data{
+            id
+            mobile
+            nickname
+            avatar
+            status
+            updateTime
+            createTime
+            balance
+            role
+        }
+    }
+}

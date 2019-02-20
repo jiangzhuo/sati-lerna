@@ -1,0 +1,19 @@
+mutation createHome($data: createHomeRequest!){
+    createHome(data: $data){
+        code
+        message
+        data{
+            id
+            type
+            resourceId
+            background
+            name
+            description
+            author
+            position
+            createTime
+            updateTime
+            validTime
+        }
+    }
+}

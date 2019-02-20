@@ -1,0 +1,17 @@
+mutation disableCoupon($couponId: String){
+    disableCoupon(couponId: $couponId){
+        code
+        message
+        data{
+            id
+            status
+            couponCode
+            value
+            userId
+            createTime
+            validTime
+            expireTime
+            usedTime
+        }
+    }
+}

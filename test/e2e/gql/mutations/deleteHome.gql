@@ -1,0 +1,19 @@
+mutation deleteHome($id: String!){
+    deleteHome(id: $id){
+        code
+        message
+        data{
+            id
+            type
+            resourceId
+            background
+            name
+            description
+            author
+            position
+            createTime
+            updateTime
+            validTime
+        }
+    }
+}

@@ -1,0 +1,20 @@
+query getNatureAlbumById($id: String!){
+    getNatureAlbumById(id: $id){
+        code
+        message
+        data{
+            id
+            background
+            name
+            description
+            scenes
+            price
+            createTime
+            updateTime
+            author
+            copy
+            status
+            validTime
+        }
+    }
+}

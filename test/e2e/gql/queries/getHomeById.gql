@@ -1,0 +1,19 @@
+query getHomeById($id: String!){
+    getHomeById(id: $id){
+        code
+        message
+        data{
+            id
+            type
+            resourceId
+            background
+            name
+            description
+            author
+            position
+            createTime
+            updateTime
+            validTime
+        }
+    }
+}

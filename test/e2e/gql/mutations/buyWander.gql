@@ -1,0 +1,19 @@
+mutation buyWander($id: String!){
+    buyWander(id: $id){
+        code
+        message
+        data{
+            id
+            userId
+            wanderId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

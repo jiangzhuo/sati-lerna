@@ -1,0 +1,23 @@
+mutation deleteMindfulness($id: String!){
+    deleteMindfulness(id: $id){
+        code
+        message
+        data{
+            id
+            background
+            name
+            description
+            scenes
+            price
+            createTime
+            updateTime
+            author
+            audio
+            copy
+            mindfulnessAlbums
+            status
+            validTime
+            natureId
+        }
+    }
+}

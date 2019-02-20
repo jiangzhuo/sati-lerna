@@ -1,0 +1,19 @@
+query getWanderAlbumRecordByWanderAlbumId($wanderAlbumId: String!){
+    getWanderAlbumRecordByWanderAlbumId(wanderAlbumId: $wanderAlbumId){
+        code
+        message
+        data{
+            id
+            userId
+            wanderAlbumId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

@@ -1,0 +1,17 @@
+query getCoupon($first: Int, $after: Int, $before: Int, $status: Int){
+    getCoupon(first: $first, after: $after, before: $before, status: $status){
+        code
+        message
+        data{
+            id
+            status
+            couponCode
+            value
+            userId
+            createTime
+            validTime
+            expireTime
+            usedTime
+        }
+    }
+}

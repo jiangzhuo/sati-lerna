@@ -1,0 +1,10 @@
+mutation updateScene($id: String!, $name: String!){
+    updateScene(id: $id, name: $name){
+        code
+        message
+        data{
+            id
+            name
+        }
+    }
+}

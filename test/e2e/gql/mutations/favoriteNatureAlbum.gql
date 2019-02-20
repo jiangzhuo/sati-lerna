@@ -1,0 +1,19 @@
+mutation favoriteNatureAlbum($id: String!){
+    favoriteNatureAlbum(id: $id){
+        code
+        message
+        data{
+            id
+            userId
+            natureAlbumId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

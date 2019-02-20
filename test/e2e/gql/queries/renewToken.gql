@@ -1,0 +1,10 @@
+query renewToken{
+    renewToken{
+        code
+        message
+        data{
+            accessToken
+            expiresIn
+        }
+    }
+}

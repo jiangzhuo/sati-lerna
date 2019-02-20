@@ -1,0 +1,19 @@
+mutation startNature($id: String!){
+    startNature(id: $id){
+        code
+        message
+        data{
+            id
+            userId
+            natureId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

@@ -1,0 +1,7 @@
+query saySceneHello($name: String!){
+    saySceneHello(name: $name){
+        code
+        message
+        data
+    }
+}

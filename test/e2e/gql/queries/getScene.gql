@@ -1,0 +1,10 @@
+query getScene($first: Int, $after: String){
+    getScene(first: $first, after: $after){
+        code
+        message
+        data{
+            id
+            name
+        }
+    }
+}

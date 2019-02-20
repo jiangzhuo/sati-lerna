@@ -1,0 +1,15 @@
+query loginCount($from: Int, $to: Int){
+    loginCount(from: $from, to: $to){
+        code
+        message
+        data{
+            _id{
+                namespace
+                module
+                operationName
+                fieldName
+            }
+            count
+        }
+    }
+}

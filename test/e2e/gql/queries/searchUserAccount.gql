@@ -1,0 +1,15 @@
+query searchUserAccount($userId: String!, $page: Int!, $limit: Int!, $type: String!){
+    searchUserAccount(userId: $userId, page: $page, limit: $limit, type: $type){
+        code
+        message
+        data{
+            id
+            userId
+            value
+            afterBalance
+            type
+            createTime
+            extraInfo
+        }
+    }
+}

@@ -1,0 +1,6 @@
+query sendRegisterVerificationCode($mobile: String!){
+    sendRegisterVerificationCode(mobile: $mobile){
+        code
+        message
+    }
+}

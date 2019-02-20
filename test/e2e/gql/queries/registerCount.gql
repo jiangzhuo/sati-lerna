@@ -1,0 +1,15 @@
+query registerCount($from: Int, $to: Int){
+    registerCount(from: $from, to: $to){
+        code
+        message
+        data{
+            _id{
+                namespace
+                module
+                operationName
+                fieldName
+            }
+            count
+        }
+    }
+}

@@ -1,0 +1,23 @@
+query getMindfulnessById($id: String!){
+    getMindfulnessById(id: $id){
+        code
+        message
+        data{
+            id
+            background
+            name
+            description
+            scenes
+            price
+            createTime
+            updateTime
+            author
+            audio
+            copy
+            mindfulnessAlbums
+            status
+            validTime
+            natureId
+        }
+    }
+}

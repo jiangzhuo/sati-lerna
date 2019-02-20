@@ -1,0 +1,19 @@
+query getNew($first: Int!, $after: Int, $before: Int, $status: Int){
+    getNew(first: $first, after: $after, before: $before, status: $status){
+        code
+        message
+        data{
+            type
+            resourceId
+            background
+            name
+            description
+            price
+            author
+            createTime
+            updateTime
+            validTime
+            status
+        }
+    }
+}

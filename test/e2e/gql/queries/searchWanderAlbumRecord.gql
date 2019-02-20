@@ -1,0 +1,19 @@
+query searchWanderAlbumRecord($page: Int!, $limit: Int!, $sort: String!, $favorite: Boolean, $boughtTime: [Int]){
+    searchWanderAlbumRecord(page: $page, limit: $limit, sort: $sort, favorite: $favorite, boughtTime: $boughtTime){
+        code
+        message
+        data{
+            id
+            userId
+            wanderAlbumId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

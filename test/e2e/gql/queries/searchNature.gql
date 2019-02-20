@@ -1,0 +1,25 @@
+query searchNature($keyword: String, $page: Int, $limit: Int){
+    searchNature(keyword: $keyword, page: $page, limit: $limit){
+        code
+        message
+        data{
+            total
+            data{
+                id
+                background
+                name
+                description
+                scenes
+                price
+                createTime
+                updateTime
+                author
+                audio
+                copy
+                natureAlbums
+                status
+                validTime
+            }
+        }
+    }
+}

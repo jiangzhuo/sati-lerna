@@ -1,0 +1,7 @@
+query sayNatureHello($name: String!){
+    sayNatureHello(name: $name){
+        code
+        message
+        data
+    }
+}

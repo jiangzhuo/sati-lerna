@@ -1,0 +1,17 @@
+mutation registerBySMSCode($registerUserInput: RegisterUserBySMSCodeInput, $verificationCode: String!){
+    registerBySMSCode(registerUserInput: $registerUserInput, verificationCode: $verificationCode){
+        code
+        message
+        data{
+            id
+            mobile
+            nickname
+            avatar
+            status
+            updateTime
+            createTime
+            balance
+            role
+        }
+    }
+}

@@ -1,0 +1,19 @@
+query getMindfulnessAlbumRecordByMindfulnessAlbumId($mindfulnessAlbumId: String!){
+    getMindfulnessAlbumRecordByMindfulnessAlbumId(mindfulnessAlbumId: $mindfulnessAlbumId){
+        code
+        message
+        data{
+            id
+            userId
+            mindfulnessAlbumId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

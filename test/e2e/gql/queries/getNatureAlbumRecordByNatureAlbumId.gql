@@ -1,0 +1,19 @@
+query getNatureAlbumRecordByNatureAlbumId($natureAlbumId: String!){
+    getNatureAlbumRecordByNatureAlbumId(natureAlbumId: $natureAlbumId){
+        code
+        message
+        data{
+            id
+            userId
+            natureAlbumId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

@@ -1,0 +1,22 @@
+mutation updateNature($id: String!, $data: updateNatureRequest!){
+    updateNature(id: $id, data: $data){
+        code
+        message
+        data{
+            id
+            background
+            name
+            description
+            scenes
+            price
+            createTime
+            updateTime
+            author
+            audio
+            copy
+            natureAlbums
+            status
+            validTime
+        }
+    }
+}

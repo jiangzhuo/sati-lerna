@@ -1,0 +1,25 @@
+query searchWander($keyword: String, $page: Int, $limit: Int){
+    searchWander(keyword: $keyword, page: $page, limit: $limit){
+        code
+        message
+        data{
+            total
+            data{
+                id
+                background
+                name
+                description
+                scenes
+                price
+                createTime
+                updateTime
+                author
+                audio
+                copy
+                wanderAlbums
+                status
+                validTime
+            }
+        }
+    }
+}

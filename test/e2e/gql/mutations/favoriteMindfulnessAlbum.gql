@@ -1,0 +1,19 @@
+mutation favoriteMindfulnessAlbum($id: String!){
+    favoriteMindfulnessAlbum(id: $id){
+        code
+        message
+        data{
+            id
+            userId
+            mindfulnessAlbumId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

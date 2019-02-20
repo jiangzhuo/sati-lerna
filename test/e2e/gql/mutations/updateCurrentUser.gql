@@ -1,0 +1,17 @@
+mutation updateCurrentUser($updateCurrentUserInput: UpdateCurrentUserInput){
+    updateCurrentUser(updateCurrentUserInput: $updateCurrentUserInput){
+        code
+        message
+        data{
+            id
+            mobile
+            nickname
+            avatar
+            status
+            updateTime
+            createTime
+            balance
+            role
+        }
+    }
+}

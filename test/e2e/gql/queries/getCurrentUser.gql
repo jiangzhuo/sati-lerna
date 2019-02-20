@@ -1,0 +1,17 @@
+query getCurrentUser{
+    getCurrentUser{
+        code
+        message
+        data{
+            id
+            mobile
+            nickname
+            avatar
+            status
+            updateTime
+            createTime
+            balance
+            role
+        }
+    }
+}

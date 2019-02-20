@@ -1,0 +1,22 @@
+query getNatureByIds($ids: [String]){
+    getNatureByIds(ids: $ids){
+        code
+        message
+        data{
+            id
+            background
+            name
+            description
+            scenes
+            price
+            createTime
+            updateTime
+            author
+            audio
+            copy
+            natureAlbums
+            status
+            validTime
+        }
+    }
+}

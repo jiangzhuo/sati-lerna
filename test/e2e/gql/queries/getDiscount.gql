@@ -1,0 +1,18 @@
+query getDiscount($first: Int, $after: Int, $before: Int, $discount: Int){
+    getDiscount(first: $first, after: $after, before: $before, discount: $discount){
+        code
+        message
+        data{
+            id
+            type
+            resourceId
+            background
+            name
+            discount
+            createTime
+            updateTime
+            beginTime
+            endTime
+        }
+    }
+}

@@ -1,0 +1,7 @@
+query countHome($position: Int){
+    countHome(position: $position){
+        code
+        message
+        data
+    }
+}

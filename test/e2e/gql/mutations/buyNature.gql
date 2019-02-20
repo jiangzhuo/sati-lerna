@@ -1,0 +1,19 @@
+mutation buyNature($id: String!){
+    buyNature(id: $id){
+        code
+        message
+        data{
+            id
+            userId
+            natureId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

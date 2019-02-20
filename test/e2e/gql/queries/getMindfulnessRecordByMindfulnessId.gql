@@ -1,0 +1,19 @@
+query getMindfulnessRecordByMindfulnessId($mindfulnessId: String!){
+    getMindfulnessRecordByMindfulnessId(mindfulnessId: $mindfulnessId){
+        code
+        message
+        data{
+            id
+            userId
+            mindfulnessId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

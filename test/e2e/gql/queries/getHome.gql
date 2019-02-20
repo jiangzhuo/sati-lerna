@@ -1,0 +1,19 @@
+query getHome($first: Int, $after: Int, $before: Int, $position: Int){
+    getHome(first: $first, after: $after, before: $before, position: $position){
+        code
+        message
+        data{
+            id
+            type
+            resourceId
+            background
+            name
+            description
+            author
+            position
+            createTime
+            updateTime
+            validTime
+        }
+    }
+}

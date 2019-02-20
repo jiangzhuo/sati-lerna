@@ -1,0 +1,21 @@
+query getOperation($page: Int, $limit: Int, $namespace: String, $module: String, $operationName: String, $fieldName: String){
+    getOperation(page: $page, limit: $limit, namespace: $namespace, module: $module, operationName: $operationName, fieldName: $fieldName){
+        code
+        message
+        data{
+            data{
+                timestamp
+                server
+                namespace
+                module
+                userId
+                uuid
+                clientIp
+                operationName
+                fieldName
+                other
+            }
+            total
+        }
+    }
+}

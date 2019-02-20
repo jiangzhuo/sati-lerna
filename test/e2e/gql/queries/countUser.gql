@@ -1,0 +1,7 @@
+query countUser($keyword: String){
+    countUser(keyword: $keyword){
+        code
+        message
+        data
+    }
+}

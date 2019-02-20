@@ -1,0 +1,6 @@
+query helloStat{
+    helloStat{
+        code
+        message
+    }
+}

@@ -1,0 +1,19 @@
+mutation finishWanderAlbum($id: String!, $duration: Int!){
+    finishWanderAlbum(id: $id, duration: $duration){
+        code
+        message
+        data{
+            id
+            userId
+            wanderAlbumId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

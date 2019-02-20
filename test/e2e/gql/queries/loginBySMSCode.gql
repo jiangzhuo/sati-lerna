@@ -1,0 +1,10 @@
+query loginBySMSCode($mobile: String!, $verificationCode: String!){
+    loginBySMSCode(mobile: $mobile, verificationCode: $verificationCode){
+        code
+        message
+        data{
+            accessToken
+            expiresIn
+        }
+    }
+}

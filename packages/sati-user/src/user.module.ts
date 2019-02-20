@@ -66,7 +66,6 @@ export class UserModule implements OnModuleInit {
     }
 
     async onModuleInit() {
-        console.log(2222222)
     }
 
     // /**

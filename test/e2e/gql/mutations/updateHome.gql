@@ -1,0 +1,19 @@
+mutation updateHome($id: String!, $data: updateHomeRequest!){
+    updateHome(id: $id, data: $data){
+        code
+        message
+        data{
+            id
+            type
+            resourceId
+            background
+            name
+            description
+            author
+            position
+            createTime
+            updateTime
+            validTime
+        }
+    }
+}

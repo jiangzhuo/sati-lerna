@@ -1,0 +1,19 @@
+mutation finishNatureAlbum($id: String!, $duration: Int!){
+    finishNatureAlbum(id: $id, duration: $duration){
+        code
+        message
+        data{
+            id
+            userId
+            natureAlbumId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

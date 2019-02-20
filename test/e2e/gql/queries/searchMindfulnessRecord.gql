@@ -1,0 +1,19 @@
+query searchMindfulnessRecord($page: Int!, $limit: Int!, $sort: String!, $favorite: Boolean, $boughtTime: [Int]){
+    searchMindfulnessRecord(page: $page, limit: $limit, sort: $sort, favorite: $favorite, boughtTime: $boughtTime){
+        code
+        message
+        data{
+            id
+            userId
+            mindfulnessId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

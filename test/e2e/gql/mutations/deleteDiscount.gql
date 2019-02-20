@@ -1,0 +1,18 @@
+mutation deleteDiscount($id: String!){
+    deleteDiscount(id: $id){
+        code
+        message
+        data{
+            id
+            type
+            resourceId
+            background
+            name
+            discount
+            createTime
+            updateTime
+            beginTime
+            endTime
+        }
+    }
+}

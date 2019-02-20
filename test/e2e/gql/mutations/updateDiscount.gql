@@ -1,0 +1,18 @@
+mutation updateDiscount($id: String!, $data: updateDiscountRequest!){
+    updateDiscount(id: $id, data: $data){
+        code
+        message
+        data{
+            id
+            type
+            resourceId
+            background
+            name
+            discount
+            createTime
+            updateTime
+            beginTime
+            endTime
+        }
+    }
+}

@@ -9,6 +9,8 @@
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
   },
+  "globalSetup": "./setup.js",
+  "globalTeardown": "./teardown.js",
   "testRegex": "/e2e/.*\\.(e2e-test|e2e-spec).(ts|tsx|js)$",
   "collectCoverageFrom": [
     "src/**/*.{js,jsx,tsx,ts}",

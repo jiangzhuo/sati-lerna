@@ -1,0 +1,22 @@
+mutation createNature($data: createNatureRequest!){
+    createNature(data: $data){
+        code
+        message
+        data{
+            id
+            background
+            name
+            description
+            scenes
+            price
+            createTime
+            updateTime
+            author
+            audio
+            copy
+            natureAlbums
+            status
+            validTime
+        }
+    }
+}

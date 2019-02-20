@@ -1,0 +1,7 @@
+query sayDiscountHello($name: String!){
+    sayDiscountHello(name: $name){
+        code
+        message
+        data
+    }
+}

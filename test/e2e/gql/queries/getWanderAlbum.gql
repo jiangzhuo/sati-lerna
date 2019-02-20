@@ -1,0 +1,20 @@
+query getWanderAlbum($first: Int, $after: Int, $before: Int, $status: Int){
+    getWanderAlbum(first: $first, after: $after, before: $before, status: $status){
+        code
+        message
+        data{
+            id
+            background
+            name
+            description
+            scenes
+            price
+            createTime
+            updateTime
+            author
+            copy
+            status
+            validTime
+        }
+    }
+}

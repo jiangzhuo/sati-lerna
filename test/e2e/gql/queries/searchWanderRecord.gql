@@ -1,0 +1,19 @@
+query searchWanderRecord($page: Int!, $limit: Int!, $sort: String!, $favorite: Boolean, $boughtTime: [Int]){
+    searchWanderRecord(page: $page, limit: $limit, sort: $sort, favorite: $favorite, boughtTime: $boughtTime){
+        code
+        message
+        data{
+            id
+            userId
+            wanderId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

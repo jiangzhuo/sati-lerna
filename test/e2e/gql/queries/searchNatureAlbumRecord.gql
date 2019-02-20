@@ -1,0 +1,19 @@
+query searchNatureAlbumRecord($page: Int!, $limit: Int!, $sort: String!, $favorite: Boolean, $boughtTime: [Int]){
+    searchNatureAlbumRecord(page: $page, limit: $limit, sort: $sort, favorite: $favorite, boughtTime: $boughtTime){
+        code
+        message
+        data{
+            id
+            userId
+            natureAlbumId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

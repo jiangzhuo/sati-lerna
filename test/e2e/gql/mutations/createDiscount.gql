@@ -1,0 +1,18 @@
+mutation createDiscount($data: createDiscountRequest!){
+    createDiscount(data: $data){
+        code
+        message
+        data{
+            id
+            type
+            resourceId
+            background
+            name
+            discount
+            createTime
+            updateTime
+            beginTime
+            endTime
+        }
+    }
+}

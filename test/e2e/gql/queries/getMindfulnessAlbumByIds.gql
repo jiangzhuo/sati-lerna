@@ -1,0 +1,20 @@
+query getMindfulnessAlbumByIds($ids: [String]){
+    getMindfulnessAlbumByIds(ids: $ids){
+        code
+        message
+        data{
+            id
+            background
+            name
+            description
+            scenes
+            price
+            createTime
+            updateTime
+            author
+            copy
+            status
+            validTime
+        }
+    }
+}

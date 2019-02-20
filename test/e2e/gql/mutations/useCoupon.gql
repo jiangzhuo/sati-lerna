@@ -1,0 +1,17 @@
+mutation useCoupon($couponCode: String!){
+    useCoupon(couponCode: $couponCode){
+        code
+        message
+        data{
+            id
+            status
+            couponCode
+            value
+            userId
+            createTime
+            validTime
+            expireTime
+            usedTime
+        }
+    }
+}

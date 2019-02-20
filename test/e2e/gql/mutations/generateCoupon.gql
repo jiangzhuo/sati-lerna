@@ -1,0 +1,17 @@
+mutation generateCoupon($count: Int, $value: Int, $status: Int, $userId: String, $validTime: Int, $expireTime: Int){
+    generateCoupon(count: $count, value: $value, status: $status, userId: $userId, validTime: $validTime, expireTime: $expireTime){
+        code
+        message
+        data{
+            id
+            status
+            couponCode
+            value
+            userId
+            createTime
+            validTime
+            expireTime
+            usedTime
+        }
+    }
+}

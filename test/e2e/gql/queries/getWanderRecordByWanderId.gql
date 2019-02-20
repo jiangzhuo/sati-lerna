@@ -1,0 +1,19 @@
+query getWanderRecordByWanderId($wanderId: String!){
+    getWanderRecordByWanderId(wanderId: $wanderId){
+        code
+        message
+        data{
+            id
+            userId
+            wanderId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

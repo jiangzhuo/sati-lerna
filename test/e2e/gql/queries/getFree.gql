@@ -1,0 +1,18 @@
+query getFree($first: Int, $after: Int, $before: Int){
+    getFree(first: $first, after: $after, before: $before){
+        code
+        message
+        data{
+            id
+            type
+            resourceId
+            background
+            name
+            discount
+            createTime
+            updateTime
+            beginTime
+            endTime
+        }
+    }
+}

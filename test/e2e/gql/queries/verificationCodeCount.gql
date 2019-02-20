@@ -1,0 +1,15 @@
+query verificationCodeCount($from: Int, $to: Int){
+    verificationCodeCount(from: $from, to: $to){
+        code
+        message
+        data{
+            _id{
+                namespace
+                module
+                operationName
+                fieldName
+            }
+            count
+        }
+    }
+}

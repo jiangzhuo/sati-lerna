@@ -1,0 +1,19 @@
+query getHomeByPageAndLimit($page: Int, $limit: Int, $position: Int){
+    getHomeByPageAndLimit(page: $page, limit: $limit, position: $position){
+        code
+        message
+        data{
+            id
+            type
+            resourceId
+            background
+            name
+            description
+            author
+            position
+            createTime
+            updateTime
+            validTime
+        }
+    }
+}

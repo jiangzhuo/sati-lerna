@@ -1,0 +1,17 @@
+query getUserById($id: String!){
+    getUserById(id: $id){
+        code
+        message
+        data{
+            id
+            mobile
+            nickname
+            avatar
+            status
+            updateTime
+            createTime
+            balance
+            role
+        }
+    }
+}

@@ -1,0 +1,10 @@
+mutation deleteScene($id: String!){
+    deleteScene(id: $id){
+        code
+        message
+        data{
+            id
+            name
+        }
+    }
+}

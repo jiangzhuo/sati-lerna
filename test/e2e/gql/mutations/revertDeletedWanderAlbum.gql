@@ -1,0 +1,20 @@
+mutation revertDeletedWanderAlbum($id: String!){
+    revertDeletedWanderAlbum(id: $id){
+        code
+        message
+        data{
+            id
+            background
+            name
+            description
+            scenes
+            price
+            createTime
+            updateTime
+            author
+            copy
+            status
+            validTime
+        }
+    }
+}

@@ -1,0 +1,19 @@
+mutation startWander($id: String!){
+    startWander(id: $id){
+        code
+        message
+        data{
+            id
+            userId
+            wanderId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

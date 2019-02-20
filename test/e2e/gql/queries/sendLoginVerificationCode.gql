@@ -1,0 +1,6 @@
+query sendLoginVerificationCode($mobile: String!){
+    sendLoginVerificationCode(mobile: $mobile){
+        code
+        message
+    }
+}

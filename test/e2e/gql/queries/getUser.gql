@@ -1,0 +1,17 @@
+query getUser($first: Int, $after: String){
+    getUser(first: $first, after: $after){
+        code
+        message
+        data{
+            id
+            mobile
+            nickname
+            avatar
+            status
+            updateTime
+            createTime
+            balance
+            role
+        }
+    }
+}

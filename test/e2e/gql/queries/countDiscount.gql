@@ -1,0 +1,7 @@
+query countDiscount($position: Int){
+    countDiscount(position: $position){
+        code
+        message
+        data
+    }
+}

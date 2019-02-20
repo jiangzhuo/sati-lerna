@@ -1,0 +1,17 @@
+query getUserByMobile($mobile: String!){
+    getUserByMobile(mobile: $mobile){
+        code
+        message
+        data{
+            id
+            mobile
+            nickname
+            avatar
+            status
+            updateTime
+            createTime
+            balance
+            role
+        }
+    }
+}

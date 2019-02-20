@@ -1,0 +1,19 @@
+query getNatureRecordByNatureId($natureId: String!){
+    getNatureRecordByNatureId(natureId: $natureId){
+        code
+        message
+        data{
+            id
+            userId
+            natureId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

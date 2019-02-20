@@ -1,0 +1,7 @@
+query userCount($from: Int, $to: Int){
+    userCount(from: $from, to: $to){
+        code
+        message
+        data
+    }
+}

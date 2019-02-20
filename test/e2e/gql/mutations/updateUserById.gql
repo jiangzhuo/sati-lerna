@@ -1,0 +1,17 @@
+mutation updateUserById($updateUserInput: UpdateUserInput){
+    updateUserById(updateUserInput: $updateUserInput){
+        code
+        message
+        data{
+            id
+            mobile
+            nickname
+            avatar
+            status
+            updateTime
+            createTime
+            balance
+            role
+        }
+    }
+}

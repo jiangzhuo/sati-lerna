@@ -1,0 +1,7 @@
+query countUserAccount($userId: String!, $type: String!){
+    countUserAccount(userId: $userId, type: $type){
+        code
+        message
+        data
+    }
+}

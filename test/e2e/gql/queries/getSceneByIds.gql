@@ -1,0 +1,10 @@
+query getSceneByIds($ids: [String]){
+    getSceneByIds(ids: $ids){
+        code
+        message
+        data{
+            id
+            name
+        }
+    }
+}

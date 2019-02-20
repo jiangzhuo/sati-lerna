@@ -1,0 +1,19 @@
+mutation startMindfulness($id: String!){
+    startMindfulness(id: $id){
+        code
+        message
+        data{
+            id
+            userId
+            mindfulnessId
+            favorite
+            totalDuration
+            longestDuration
+            startCount
+            finishCount
+            lastStartTime
+            lastFinishTime
+            boughtTime
+        }
+    }
+}

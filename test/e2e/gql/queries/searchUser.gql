@@ -1,0 +1,20 @@
+query searchUser($keyword: String, $page: Int!, $limit: Int!){
+    searchUser(keyword: $keyword, page: $page, limit: $limit){
+        code
+        message
+        data{
+            total
+            data{
+                id
+                mobile
+                nickname
+                avatar
+                status
+                updateTime
+                createTime
+                balance
+                role
+            }
+        }
+    }
+}

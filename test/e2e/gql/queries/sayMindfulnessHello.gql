@@ -1,0 +1,7 @@
+query sayMindfulnessHello($name: String!){
+    sayMindfulnessHello(name: $name){
+        code
+        message
+        data
+    }
+}

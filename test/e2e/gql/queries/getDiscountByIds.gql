@@ -1,0 +1,18 @@
+query getDiscountByIds($ids: [String]){
+    getDiscountByIds(ids: $ids){
+        code
+        message
+        data{
+            id
+            type
+            resourceId
+            background
+            name
+            discount
+            createTime
+            updateTime
+            beginTime
+            endTime
+        }
+    }
+}

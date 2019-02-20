@@ -1,0 +1,22 @@
+query getWanderByWanderAlbumId($id: String!){
+    getWanderByWanderAlbumId(id: $id){
+        code
+        message
+        data{
+            id
+            background
+            name
+            description
+            scenes
+            price
+            createTime
+            updateTime
+            author
+            audio
+            copy
+            wanderAlbums
+            status
+            validTime
+        }
+    }
+}

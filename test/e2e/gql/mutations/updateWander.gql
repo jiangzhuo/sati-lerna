@@ -1,0 +1,22 @@
+mutation updateWander($id: String!, $data: updateWanderRequest!){
+    updateWander(id: $id, data: $data){
+        code
+        message
+        data{
+            id
+            background
+            name
+            description
+            scenes
+            price
+            createTime
+            updateTime
+            author
+            audio
+            copy
+            wanderAlbums
+            status
+            validTime
+        }
+    }
+}

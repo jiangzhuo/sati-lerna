@@ -53,7 +53,5 @@ export class StatsModule implements OnModuleInit {
     }
 
     async onModuleInit() {
-
-        console.log(1111111111111)
     }
 }

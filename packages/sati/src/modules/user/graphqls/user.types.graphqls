@@ -173,3 +173,10 @@ type UserAccount {
     "额外信息，json格式的字符串"
     extraInfo: String
 }
+
+type UserModuleCommonResult {
+    # status code
+    code: Int
+    # response message
+    message: String
+}
