@@ -7,13 +7,17 @@ import { WanderAlbum } from "../interfaces/wanderAlbum.interface";
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ObjectId } from 'mongodb';
+import { MindfulnessAlbum } from "../interfaces/mindfulnessAlbum.interface";
+import { NatureAlbum } from "../interfaces/natureAlbum.interface";
 
 @Injectable()
 export class SceneService {
     constructor(
         @InjectModel('Scene') private readonly sceneModel: Model<Scene>,
         @InjectModel('Mindfulness') private readonly mindfulnessModel: Model<Mindfulness>,
+        @InjectModel('MindfulnessAlbum') private readonly mindfulnessAlbumModel: Model<MindfulnessAlbum>,
         @InjectModel('Nature') private readonly natureModel: Model<Nature>,
+        @InjectModel('NatureAlbum') private readonly natureAlbumModel: Model<NatureAlbum>,
         @InjectModel('Wander') private readonly wanderModel: Model<Wander>,
         @InjectModel('WanderAlbum') private readonly wanderAlbumModel: Model<WanderAlbum>,
     ) { }
@@ -27,12 +31,14 @@ export class SceneService {
     }
 
     async updateScene(id, name) {
-        return await this.sceneModel.findOneAndUpdate({ _id: id }, { name: name }).exec()
+        return await this.sceneModel.findOneAndUpdate({ _id: id }, { name: name }, { new: true }).exec()
     }
 
     async deleteScene(id) {
         await this.mindfulnessModel.updateMany({}, { $pull: { scenes: id } }).exec();
+        await this.mindfulnessAlbumModel.updateMany({}, { $pull: { scenes: id } }).exec();
         await this.natureModel.updateMany({}, { $pull: { scenes: id } }).exec();
+        await this.natureAlbumModel.updateMany({}, { $pull: { scenes: id } }).exec();
         await this.wanderModel.updateMany({}, { $pull: { scenes: id } }).exec();
         await this.wanderAlbumModel.updateMany({}, { $pull: { scenes: id } }).exec();
         return await this.sceneModel.findOneAndRemove({ _id: id }).exec()

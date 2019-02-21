@@ -1,38 +1,14 @@
-import {Test} from '@nestjs/testing';
-import {INestApplication, INestApplicationContext} from '@nestjs/common';
+import { INestApplication, INestApplicationContext } from '@nestjs/common';
 import * as supertest from 'supertest';
-import {ServiceBroker} from 'moleculer';
 
 const mutations = require('./gql/mutations');
 const queries = require('./gql/queries');
 
 describe('User', () => {
     let app: INestApplication;
-    let broker: ServiceBroker;
 
-    beforeAll(async (done) => {
-        const {AppModule} = require('../../packages/sati/src/app.module');
-        const {ResourceModule} = require('../../packages/sati-resource/src/resource.module');
-        const {UserModule} = require('../../packages/sati-user/src/user.module');
-        const {StatsModule} = require('../../packages/sati-stats/src/stats.module');
-
-        const appModule = await Test.createTestingModule({
-            imports: [AppModule,
-                ResourceModule.forRoot(),
-                UserModule.forRoot(),
-                StatsModule.forRoot()
-            ],
-        }).compile();
-        app = appModule.createNestApplication();
-        await app.init();
-
-        broker = appModule.get('MoleculerBroker');
-
-        broker.waitForServices(["discount", "home", "mindfulness", "mindfulnessAlbum", "nature", "natureAlbum", "wander", "wanderAlbum", "scene"
-            , "coupon", "user"
-            , "operation", "userStats"], 10000, 1000).then(done);
-
-        // done();
+    beforeAll(async () => {
+        app = process['__app__'];
     }, 20000000);
 
     describe('User', () => {
@@ -473,9 +449,5 @@ describe('User', () => {
             expect(resObj.data.countUserAccount.message).toBe("success");
             expect(resObj.data.countUserAccount.data).toBe(4);
         });
-    });
-
-    afterAll(async () => {
-        await app.close();
     });
 });
