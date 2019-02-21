@@ -18,6 +18,7 @@ import * as jaeger from 'moleculer-jaeger';
             namespace: "sati",
             metrics: true,
             transporter: process.env.TRANSPORTER,
+            cacher: "Memory",
             logLevel: process.env.LOG_LEVEL
         }),
         MoleculerModule.forFeature([{

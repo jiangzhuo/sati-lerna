@@ -39,11 +39,6 @@ describe('Resource', () => {
         it(`sayHomeHello`, async () => {
             // return true;
 
-            // const res = await supertest(app.getHttpServer())
-            //     .post('/graphql')
-            //     .send({
-            //         query: 'query sayHomeHello {  sayHomeHello(name:"jiangzhuo") {    code    message data  }}',
-            //     });
             const res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .send({

@@ -54,7 +54,8 @@ import * as jaeger from 'moleculer-jaeger';
             // logger: bindings => new Logger(),
             metrics: true,
             transporter: process.env.TRANSPORTER,
-            hotReload: true,
+            // hotReload: true,
+            cacher: "Memory",
             logLevel: process.env.LOG_LEVEL
         }),
         MoleculerModule.forFeature([{

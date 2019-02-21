@@ -124,20 +124,6 @@ const glob = require("glob");
 let files = glob.sync("**/src/**/*.graphqls");
 let queryIndexJs = 'const fs = require(\'fs\');\nconst path = require(\'path\');\n\n';
 let mutationIndexJs = 'const fs = require(\'fs\');\nconst path = require(\'path\');\n\n';
-// files.forEach((file) => {
-//     // genAll(path.join(process.cwd(), file), outputPath);
-//
-//     let schemaFilePath = path.join(process.cwd(), file);
-//     const typeDef = fs.readFileSync(schemaFilePath);
-//     const source = new Source(typeDef.toString());
-//     const gqlSchema = buildSchema(source);
-//
-//     if (gqlSchema.getMutationType()) {
-//         generateFile(gqlSchema, 'Query', outputPath);
-//     }
-// });
-// fs.writeFileSync(path.join(path.join(outputPath, 'queries'), 'index.js'), indexJs);
-// indexJsExportAll += `module.exports.queries = require('./queries');\n`;
 
 const queryWriteFolder = path.join(outputPath, 'queries');
 const mutationWriteFolder = path.join(outputPath, 'mutations');
@@ -148,7 +134,6 @@ indexJs = 'const fs = require(\'fs\');\nconst path = require(\'path\');\n\n';
 files.forEach((file) => {
     // genAll(path.join(process.cwd(), file), outputPath);
 
-    console.log(file)
     let schemaFilePath = path.join(process.cwd(), file);
     const typeDef = fs.readFileSync(schemaFilePath);
     const source = new Source(typeDef.toString());

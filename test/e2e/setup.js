@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const { MongoMemoryReplSet } = require('mongodb-memory-server');
+const { MongoClient } = require('mongodb');
 const replSet = new MongoMemoryReplSet();
 
 module.exports = async () => {
@@ -31,4 +32,61 @@ module.exports = async () => {
         SMS_LOGIN_TEMPLATE_CODE: 'SMS_144853217'
     });
     global.__replSet__ = replSet;
+
+    let con = await MongoClient.connect(process.env.MONGODB_CONNECTION_STR, {useNewUrlParser: true});
+    let db = con.db(await replSet.getDbName());
+    let userCol = db.collection('user');
+    // 等待master就绪
+    const admin = db.admin();
+    let isMaster = await admin.command({isMaster: 1});
+    while(!isMaster.ismaster) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        isMaster = await admin.command({isMaster: 1});
+    }
+
+
+    await userCol.insertOne({
+        "mobile": "1",
+        "password": "$2a$10$GHG8D.Z8.xjsiy71RfhQu.tCwx/Bld6vqjj6nD6eyom8bhMmsIr3m",
+        "nickname": "admin",
+        "status": 0,
+        "balance": 100007.0,
+        "role": 2047.0
+    });
+
+    await userCol.insertOne({
+        "mobile" : "2",
+        "password" : "$2a$10$fQyMSm8LZEqP7oneKyYm1eeyuuVi1FmNexIRwMT8OmEiMKevmTimG",
+        "nickname" : "jiangzhuo",
+        "status" : 0,
+        "balance" : 0.0
+    });
+
+    await userCol.insertOne({
+        "mobile" : "3",
+        "password" : "$2a$10$OhZyFQJp354UXgLxG/EAL.W5YFYAA2M45hjREc3xSYVyF/ubhpuOC",
+        "nickname" : "半个月亮没消息",
+        "avatar" : "http://sati-test.oss-cn-beijing.aliyuncs.com/avatar/addf9ce0-baff-11e8-90cc-b70dad818327.jpg",
+        "status" : 0,
+        "balance" : 0.0
+    });
+
+    await userCol.insertOne({
+        "mobile" : "4",
+        "password" : "$2a$10$Ok2PjqyMABrcQtp/QlG0RuZiF1hljZKA3FisZJPwcncdGPsT/jfSG",
+        "nickname" : "正月十五月亮圆",
+        "avatar" : "http://sati-test.oss-cn-beijing.aliyuncs.com/avatar/addf9ce0-baff-11e8-90cc-b70dad818327.jpg",
+        "status" : 0,
+        "balance" : 0.0
+    });
+
+    await userCol.insertOne({
+        "mobile" : "5",
+        "password" : "$2a$10$Ok2PjqyMABrcQtp/QlG0RuZiF1hljZKA3FisZJPwcncdGPsT/jfSG",
+        "nickname" : "正月十五月亮圆",
+        "avatar" : "http://sati-test.oss-cn-beijing.aliyuncs.com/avatar/addf9ce0-baff-11e8-90cc-b70dad818327.jpg",
+        "status" : 0,
+        "balance" : 0.0
+    });
+    con.close();
 };
