@@ -390,15 +390,200 @@ describe('Resource', () => {
             expect(JSON.parse(res.text).data.buyMindfulness.code).toBe(400);
             expect(JSON.parse(res.text).data.buyMindfulness.message).toBe("already bought");
         });
-        it.todo('startMindfulness');
-        it.todo('finishMindfulness');
+        it('startMindfulness', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.startMindfulness,
+                    variables: { id: mindfulnessId }
+                });
+            expect(res.status).toBe(200);
+            expect(JSON.parse(res.text).data.startMindfulness.data.startCount).toBe(1);
+        });
+        it('finishMindfulness', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.finishMindfulness,
+                    variables: { id: mindfulnessId, duration: 10 }
+                });
+            expect(res.status).toBe(200);
+            expect(JSON.parse(res.text).data.finishMindfulness.data.finishCount).toBe(1);
+            expect(JSON.parse(res.text).data.finishMindfulness.data.totalDuration).toBe(10);
+            res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.finishMindfulness,
+                    variables: { id: mindfulnessId, duration: 15 }
+                });
+            expect(res.status).toBe(200);
+            expect(JSON.parse(res.text).data.finishMindfulness.data.finishCount).toBe(2);
+            expect(JSON.parse(res.text).data.finishMindfulness.data.totalDuration).toBe(25);
+            expect(JSON.parse(res.text).data.finishMindfulness.data.longestDuration).toBe(15);
+        });
 
-        it.todo('getMindfulness');
-        it.todo('getMindfulnessById');
-        it.todo('getMindfulnessByIds');
-        it.todo('searchMindfulness');
-        it.todo('getMindfulnessRecordByMindfulnessId');
-        it.todo('searchMindfulnessRecord');
+        it('getMindfulness', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getMindfulness,
+                    variables: { first: 5, after: 0, before: Math.floor(Date.now() / 1000) + 1000, status: 0 }
+                });
+            expect(res.status).toBe(200);
+            expect(JSON.parse(res.text).data.getMindfulness.data.length).toBe(1);
+        });
+        it('getMindfulnessById', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getMindfulnessById,
+                    variables: { id: mindfulnessId }
+                });
+            expect(res.status).toBe(200);
+            expect(JSON.parse(res.text).data.getMindfulnessById.data.id).toBe(mindfulnessId);
+        });
+        it('getMindfulnessByIds', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getMindfulnessByIds,
+                    variables: { ids: [mindfulnessId] }
+                });
+            expect(res.status).toBe(200);
+            expect(JSON.parse(res.text).data.getMindfulnessByIds.data.length).toBe(1);
+            expect(JSON.parse(res.text).data.getMindfulnessByIds.data[0].id).toBe(mindfulnessId);
+        });
+        it('searchMindfulness', async () => {
+            await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.createMindfulness,
+                    variables: {
+                        data: {
+                            background: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+                            name: "饺子",
+                            description: "韩国人真实爱面子",
+                            scenes: [],
+                            price: 100,
+                            author: userId,
+                            audio: 'https://archive.org/download/testmp3testfile/testmp3testfile_64kb.m3u',
+                            copy: '韩国人这个车、房子、衣服、长相啊 什么都要比',
+                            mindfulnessAlbums: [],
+                            status: 0,
+                            validTime: Math.floor(Date.now() / 1000),
+                            natureId: '000000000000000000000000',
+                        }
+                    }
+                });
+            await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.createMindfulness,
+                    variables: {
+                        data: {
+                            background: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+                            name: "馒头",
+                            description: "韩国人真实爱面子",
+                            scenes: [],
+                            price: 100,
+                            author: userId,
+                            audio: 'https://archive.org/download/testmp3testfile/testmp3testfile_64kb.m3u',
+                            copy: '韩国人这个车、房子、衣服、长相啊 什么都要比',
+                            mindfulnessAlbums: [],
+                            status: 0,
+                            validTime: Math.floor(Date.now() / 1000),
+                            natureId: '000000000000000000000000',
+                        }
+                    }
+                });
+            await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.createMindfulness,
+                    variables: {
+                        data: {
+                            background: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+                            name: "红豆面包",
+                            description: "韩国人真实爱面子",
+                            scenes: [],
+                            price: 100,
+                            author: userId,
+                            audio: 'https://archive.org/download/testmp3testfile/testmp3testfile_64kb.m3u',
+                            copy: '韩国人这个车、房子、衣服、长相啊 什么都要比',
+                            mindfulnessAlbums: [],
+                            status: 0,
+                            validTime: Math.floor(Date.now() / 1000),
+                            natureId: '000000000000000000000000',
+                        }
+                    }
+                });
+            await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.createMindfulness,
+                    variables: {
+                        data: {
+                            background: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+                            name: "抹茶面包",
+                            description: "韩国人真实爱面子",
+                            scenes: [],
+                            price: 100,
+                            author: userId,
+                            audio: 'https://archive.org/download/testmp3testfile/testmp3testfile_64kb.m3u',
+                            copy: '韩国人这个车、房子、衣服、长相啊 什么都要比',
+                            mindfulnessAlbums: [],
+                            status: 0,
+                            validTime: Math.floor(Date.now() / 1000),
+                            natureId: '000000000000000000000000',
+                        }
+                    }
+                });
+
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.searchMindfulness,
+                    variables: { keyword: "面包", page: 1, limit: 1 }
+                });
+            expect(res.status).toBe(200);
+
+            expect(JSON.parse(res.text).data.searchMindfulness.data.total).toBe(2);
+            expect(JSON.parse(res.text).data.searchMindfulness.data.data.length).toBe(1);
+        });
+        it('getMindfulnessRecordByMindfulnessId', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getMindfulnessRecordByMindfulnessId,
+                    variables: { mindfulnessId: mindfulnessId }
+                });
+            expect(res.status).toBe(200);
+            expect(JSON.parse(res.text).data.getMindfulnessRecordByMindfulnessId.data.mindfulnessId).toBe(mindfulnessId);
+        });
+        it('searchMindfulnessRecord', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.searchMindfulnessRecord,
+                    variables: { page: 1, limit: 10, sort: '+id' }
+                });
+            console.log(res.text)
+            expect(res.status).toBe(200);
+            expect(JSON.parse(res.text).data.searchMindfulnessRecord.data.length).toBe(1);
+        });
     });
 
     describe('MindfulnessAlbum', () => {

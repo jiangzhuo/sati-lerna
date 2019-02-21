@@ -47,7 +47,7 @@ module.exports = async (context) => {
     });
     global['__replSet__'] = replSet;
 
-    console.log(process.env.MONGODB_CONNECTION_STR)
+    // console.log(process.env.MONGODB_CONNECTION_STR)
     // 等两秒 等个主起来
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
