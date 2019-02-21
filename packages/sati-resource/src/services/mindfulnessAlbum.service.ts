@@ -23,7 +23,7 @@ export class MindfulnessAlbumService {
     }
 
     async sayHello(name: string) {
-        return { msg: `Mindfulness Hello ${ name }!` };
+        return { msg: `Mindfulness Hello ${name}!` };
     }
 
     async getMindfulnessAlbum(first = 20, after?: number, before?: number, status = 1) {
@@ -148,12 +148,12 @@ export class MindfulnessAlbumService {
 
     async deleteMindfulnessAlbum(id) {
         // await this.mindfulnessModel.updateMany({ mindfulnessAlbums: id }, { $pull: { mindfulnessAlbums: id } }).exec();
-        return await this.mindfulnessAlbumModel.findOneAndUpdate({ _id: id }, { $bit: { status: { or: 0b000000000000000000000000000000001 } } }).exec()
+        return await this.mindfulnessAlbumModel.findOneAndUpdate({ _id: id }, { $bit: { status: { or: 0b000000000000000000000000000000001 } } }, { new: true }).exec()
     }
 
     async revertDeletedMindfulnessAlbum(id) {
         // await this.mindfulnessModel.updateMany({ mindfulnessAlbums: id }, { $pull: { mindfulnessAlbums: id } }).exec();
-        return await this.mindfulnessAlbumModel.findOneAndUpdate({ _id: id }, { $bit: { status: { and: 0b001111111111111111111111111111110 } } }).exec()
+        return await this.mindfulnessAlbumModel.findOneAndUpdate({ _id: id }, { $bit: { status: { and: 0b001111111111111111111111111111110 } } }, { new: true }).exec()
     }
 
     async favoriteMindfulnessAlbum(userId, mindfulnessAlbumId) {

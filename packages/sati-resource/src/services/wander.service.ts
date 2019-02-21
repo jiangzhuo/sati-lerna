@@ -26,7 +26,8 @@ export class WanderService {
         @InjectModel('WanderAlbum') private readonly wanderAlbumModel: Model<WanderAlbum>,
         @InjectModel('WanderRecord') private readonly wanderRecordModel: Model<WanderRecord>,
         @InjectModel('WanderAlbumRecord') private readonly wanderAlbumRecordModel: Model<WanderAlbumRecord>
-    ) { }
+    ) {
+    }
 
     async sayHello(name: string) {
         return { msg: `Wander Hello ${name}!` };
@@ -145,11 +146,11 @@ export class WanderService {
     }
 
     async deleteWander(id) {
-        return await this.wanderModel.findOneAndUpdate({ _id: id }, { $bit: { status: { or: 0b000000000000000000000000000000001 } } }).exec()
+        return await this.wanderModel.findOneAndUpdate({ _id: id }, { $bit: { status: { or: 0b000000000000000000000000000000001 } } }, { new: true }).exec()
     }
 
     async revertDeletedWander(id) {
-        return await this.wanderModel.findOneAndUpdate({ _id: id }, { $bit: { status: { and: 0b001111111111111111111111111111110 } } }).exec()
+        return await this.wanderModel.findOneAndUpdate({ _id: id }, { $bit: { status: { and: 0b001111111111111111111111111111110 } } }, { new: true }).exec()
     }
 
     async favoriteWander(userId, wanderId) {
@@ -240,6 +241,7 @@ export class WanderService {
             return await this.wanderAlbumModel.find({}, null, { sort: '-_id' }).limit(first).exec();
         }
     }
+
     async updateTag(id) {
         const doc = await this.wanderModel.findOne({ _id: id }).exec();
         const nameCut = nodejieba.cut(doc.name);

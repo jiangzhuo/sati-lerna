@@ -26,7 +26,7 @@ export class NatureService {
     }
 
     async sayHello(name: string) {
-        return { msg: `Nature Hello ${ name }!` };
+        return { msg: `Nature Hello ${name}!` };
     }
 
     async getNature(first = 20, after?: number, before?: number, status = 1) {
@@ -153,11 +153,11 @@ export class NatureService {
     }
 
     async deleteNature(id) {
-        return await this.natureModel.findOneAndUpdate({ _id: id }, { $bit: { status: { or: 0b000000000000000000000000000000001 } } }).exec()
+        return await this.natureModel.findOneAndUpdate({ _id: id }, { $bit: { status: { or: 0b000000000000000000000000000000001 } } }, { new: true }).exec()
     }
 
     async revertDeletedNature(id) {
-        return await this.natureModel.findOneAndUpdate({ _id: id }, { $bit: { status: { and: 0b001111111111111111111111111111110 } } }).exec()
+        return await this.natureModel.findOneAndUpdate({ _id: id }, { $bit: { status: { and: 0b001111111111111111111111111111110 } } }, { new: true }).exec()
     }
 
     async favoriteNature(userId, natureId) {

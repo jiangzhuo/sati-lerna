@@ -28,7 +28,7 @@ export class NatureAlbumService {
     }
 
     async sayHello(name: string) {
-        return { msg: `Nature Hello ${ name }!` };
+        return { msg: `Nature Hello ${name}!` };
     }
 
     async getNatureAlbum(first = 20, after?: number, before?: number, status = 1) {
@@ -150,12 +150,12 @@ export class NatureAlbumService {
 
     async deleteNatureAlbum(id) {
         // await this.natureModel.updateMany({ natureAlbums: id }, { $pull: { natureAlbums: id } }).exec();
-        return await this.natureAlbumModel.findOneAndUpdate({ _id: id }, { $bit: { status: { or: 0b000000000000000000000000000000001 } } }).exec()
+        return await this.natureAlbumModel.findOneAndUpdate({ _id: id }, { $bit: { status: { or: 0b000000000000000000000000000000001 } } }, { new: true }).exec()
     }
 
     async revertDeletedNatureAlbum(id) {
         // await this.natureModel.updateMany({ natureAlbums: id }, { $pull: { natureAlbums: id } }).exec();
-        return await this.natureAlbumModel.findOneAndUpdate({ _id: id }, { $bit: { status: { and: 0b001111111111111111111111111111110 } } }).exec()
+        return await this.natureAlbumModel.findOneAndUpdate({ _id: id }, { $bit: { status: { and: 0b001111111111111111111111111111110 } } }, { new: true }).exec()
     }
 
     async favoriteNatureAlbum(userId, natureAlbumId) {
