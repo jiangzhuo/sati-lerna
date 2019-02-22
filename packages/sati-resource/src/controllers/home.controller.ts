@@ -90,7 +90,7 @@ export class HomeController extends Service {
     }
 
     async countHome(ctx: Context){
-        return { data: await this.homeService.countHome(ctx.params.postion) }
+        return { data: await this.homeService.countHome(ctx.params.position) }
     }
 
     async getHomeById(ctx: Context) {

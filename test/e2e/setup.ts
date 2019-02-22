@@ -106,31 +106,31 @@ module.exports = async (context) => {
         "balance": 0.0
     });
     con.close();
-
-    const { AppModule } = require('../../packages/sati/src/app.module');
-    const { ResourceModule } = require('../../packages/sati-resource/src/resource.module');
-    const { UserModule } = require('../../packages/sati-user/src/user.module');
-    const { StatsModule } = require('../../packages/sati-stats/src/stats.module');
-
-    const appModule = await Test.createTestingModule({
-        imports: [AppModule,
-            ResourceModule.forRoot(),
-            UserModule.forRoot(),
-            StatsModule.forRoot()
-        ],
-    }).compile();
-    const app = appModule.createNestApplication();
-    await app.init();
-
-    global['__app__'] = app;
-    process['__app__'] = app;
-    process['jiangzhuo'] = 'aaaaaaa';
-
-    // this.global.__app__ = app;
-
-    const broker = appModule.get('MoleculerBroker');
-
-    await broker.waitForServices(["discount", "home", "mindfulness", "mindfulnessAlbum", "nature", "natureAlbum", "wander", "wanderAlbum", "scene"
-        , "coupon", "user"
-        , "operation", "userStats"], 10000, 1000);
+    //
+    // const { AppModule } = require('../../packages/sati/src/app.module');
+    // const { ResourceModule } = require('../../packages/sati-resource/src/resource.module');
+    // const { UserModule } = require('../../packages/sati-user/src/user.module');
+    // const { StatsModule } = require('../../packages/sati-stats/src/stats.module');
+    //
+    // const appModule = await Test.createTestingModule({
+    //     imports: [AppModule,
+    //         ResourceModule.forRoot(),
+    //         UserModule.forRoot(),
+    //         StatsModule.forRoot()
+    //     ],
+    // }).compile();
+    // const app = appModule.createNestApplication();
+    // await app.init();
+    //
+    // global['__app__'] = app;
+    // process['__app__'] = app;
+    // process['jiangzhuo'] = 'aaaaaaa';
+    //
+    // // this.global.__app__ = app;
+    //
+    // const broker = appModule.get('MoleculerBroker');
+    //
+    // await broker.waitForServices(["discount", "home", "mindfulness", "mindfulnessAlbum", "nature", "natureAlbum", "wander", "wanderAlbum", "scene"
+    //     , "coupon", "user"
+    //     , "operation", "userStats"], 10000, 1000);
 };

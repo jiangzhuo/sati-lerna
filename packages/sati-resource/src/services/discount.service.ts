@@ -97,7 +97,7 @@ export class DiscountService {
         if (isNumber(data.endTime)) {
             updateObject['endTime'] = data.endTime;
         }
-        return await this.discountModel.findOneAndUpdate({ _id: id }, updateObject).exec()
+        return await this.discountModel.findOneAndUpdate({ _id: id }, updateObject, { new: true }).exec();
     }
 
     async deleteDiscount(id) {

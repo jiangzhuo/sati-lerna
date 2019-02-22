@@ -4,7 +4,7 @@
   "scripts": {
     "test": "jest --config=jest.json",
     "test:watch": "jest --watch --config=jest.json",
-    "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage",
+    "test:coverage": "jest --config=test/e2e/jest-e2e.json --coverage --coverageDirectory=coverage --runInBand --detectOpenHandles",
     "e2e": "jest --config=test/e2e/jest-e2e.json --runInBand --detectOpenHandles",
     "e2e:watch": "jest --watch --config=test/e2e/jest-e2e.json"
   },

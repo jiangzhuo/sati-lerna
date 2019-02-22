@@ -191,7 +191,7 @@ export class HomeService {
     }
 
     async countHome(position?: number) {
-        let condition = {}
+        let condition = {};
         if (isNumber(position)) {
             condition = { position: position }
         }
@@ -237,7 +237,7 @@ export class HomeService {
         if (isNumber(data.validTime)) {
             updateObject['validTime'] = data.validTime;
         }
-        return await this.homeModel.findOneAndUpdate({ _id: id }, updateObject).exec()
+        return await this.homeModel.findOneAndUpdate({ _id: id }, updateObject, { new: true }).exec()
     }
 
     async deleteHome(id) {

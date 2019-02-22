@@ -1,17 +1,72 @@
 import { INestApplication, INestApplicationContext } from '@nestjs/common';
 import * as supertest from 'supertest';
 
+const { Test } = require("@nestjs/testing");
+
 const mutations = require('./gql/mutations');
 const queries = require('./gql/queries');
 
 describe('Resource', () => {
     let app: INestApplication;
-
+    let adminToken;
     beforeAll(async () => {
-        // done();
-        app = process['__app__'];
-    }, 20000000);
+        // if (!process['__app__']) {
+        // } else {
+        //     app = process['__app__'];
+        // }
 
+        const { AppModule } = require('../../packages/sati/src/app.module');
+        const { ResourceModule } = require('../../packages/sati-resource/src/resource.module');
+        const { UserModule } = require('../../packages/sati-user/src/user.module');
+        const { StatsModule } = require('../../packages/sati-stats/src/stats.module');
+
+        const appModule = await Test.createTestingModule({
+            imports: [AppModule,
+                ResourceModule.forRoot(),
+                UserModule.forRoot(),
+                StatsModule.forRoot()
+            ],
+        }).compile();
+        app = appModule.createNestApplication();
+        await app.init();
+
+        global['__app__'] = app;
+        process['__app__'] = app;
+        process['jiangzhuo'] = 'aaaaaaa';
+
+        // this.global.__app__ = app;
+
+        const broker = appModule.get('MoleculerBroker');
+
+        await broker.waitForServices(["discount", "home", "mindfulness", "mindfulnessAlbum", "nature", "natureAlbum", "wander", "wanderAlbum", "scene"
+            , "coupon", "user"
+            , "operation", "userStats"], 10000, 1000);
+
+
+        // // 进行一些require保证计算覆盖率的时候算到这些
+        // require('../../packages/sati/src/app.module');
+        // require('../../packages/sati-resource/src/resource.module');
+        // require('../../packages/sati-user/src/user.module');
+        // require('../../packages/sati-stats/src/stats.module');
+        // done();
+        const res = await supertest(app.getHttpServer())
+            .post('/graphql')
+            .send({
+                query: queries.loginBySMSCode,
+                variables: {
+                    mobile: '1',
+                    verificationCode: "666"
+                }
+            });
+        expect(res.status).toBe(200);
+        let resObj = JSON.parse(res.text);
+        adminToken = resObj.data.loginBySMSCode.data.accessToken;
+    }, 20000000);
+    afterAll(async () => {
+        if (app) {
+            await app.close();
+        }
+    });
     describe('Hello', () => {
         it(`sayMindfulnessHello`, async () => {
             const res = await supertest(app.getHttpServer())
@@ -90,21 +145,6 @@ describe('Resource', () => {
     describe('Scene', () => {
         let sceneId = '';
         let sceneId2 = '';
-        let adminToken = '';
-        beforeAll(async () => {
-            const res = await supertest(app.getHttpServer())
-                .post('/graphql')
-                .send({
-                    query: queries.loginBySMSCode,
-                    variables: {
-                        mobile: '1',
-                        verificationCode: "666"
-                    }
-                });
-            expect(res.status).toBe(200);
-            let resObj = JSON.parse(res.text);
-            adminToken = resObj.data.loginBySMSCode.data.accessToken;
-        });
         it('createScene', async () => {
             const res = await supertest(app.getHttpServer())
                 .post('/graphql')
@@ -231,31 +271,17 @@ describe('Resource', () => {
     });
 
     describe('Mindfulness', () => {
-        let adminToken = '';
         let userId = '';
         let mindfulnessId;
         beforeAll(async () => {
             let res = await supertest(app.getHttpServer())
-                .post('/graphql')
-                .send({
-                    query: queries.loginBySMSCode,
-                    variables: {
-                        mobile: '1',
-                        verificationCode: "666"
-                    }
-                });
-            expect(res.status).toBe(200);
-            let resObj = JSON.parse(res.text);
-            adminToken = resObj.data.loginBySMSCode.data.accessToken;
-
-            res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     query: queries.getCurrentUser
                 });
             expect(res.status).toBe(200);
-            resObj = JSON.parse(res.text);
+            let resObj = JSON.parse(res.text);
             userId = resObj.data.getCurrentUser.data.id
         });
 
@@ -379,7 +405,7 @@ describe('Resource', () => {
             expect(JSON.parse(res.text).data.buyMindfulness.message).toBe("success");
             expect(JSON.parse(res.text).data.buyMindfulness.data.mindfulnessId).toBe(mindfulnessId);
             expect(JSON.parse(res.text).data.buyMindfulness.data.userId).toBe(userId);
-            expect(JSON.parse(res.text).data.buyMindfulness.data.boughtTime).toBe(Math.floor(Date.now() / 1000));
+            expect(JSON.parse(res.text).data.buyMindfulness.data.boughtTime).not.toBe(0);
             res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
@@ -586,31 +612,17 @@ describe('Resource', () => {
     });
 
     describe('MindfulnessAlbum', () => {
-        let adminToken = '';
         let userId = '';
         let mindfulnessAlbumId;
         beforeAll(async () => {
             let res = await supertest(app.getHttpServer())
-                .post('/graphql')
-                .send({
-                    query: queries.loginBySMSCode,
-                    variables: {
-                        mobile: '1',
-                        verificationCode: "666"
-                    }
-                });
-            expect(res.status).toBe(200);
-            let resObj = JSON.parse(res.text);
-            adminToken = resObj.data.loginBySMSCode.data.accessToken;
-
-            res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     query: queries.getCurrentUser
                 });
             expect(res.status).toBe(200);
-            resObj = JSON.parse(res.text);
+            let resObj = JSON.parse(res.text);
             userId = resObj.data.getCurrentUser.data.id
         });
 
@@ -731,7 +743,7 @@ describe('Resource', () => {
             expect(JSON.parse(res.text).data.buyMindfulnessAlbum.message).toBe("success");
             expect(JSON.parse(res.text).data.buyMindfulnessAlbum.data.mindfulnessAlbumId).toBe(mindfulnessAlbumId);
             expect(JSON.parse(res.text).data.buyMindfulnessAlbum.data.userId).toBe(userId);
-            expect(JSON.parse(res.text).data.buyMindfulnessAlbum.data.boughtTime).toBe(Math.floor(Date.now() / 1000));
+            expect(JSON.parse(res.text).data.buyMindfulnessAlbum.data.boughtTime).not.toBe(0);
             res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
@@ -928,31 +940,17 @@ describe('Resource', () => {
     });
 
     describe('Nature', () => {
-        let adminToken = '';
         let userId = '';
         let natureId;
         beforeAll(async () => {
             let res = await supertest(app.getHttpServer())
-                .post('/graphql')
-                .send({
-                    query: queries.loginBySMSCode,
-                    variables: {
-                        mobile: '1',
-                        verificationCode: "666"
-                    }
-                });
-            expect(res.status).toBe(200);
-            let resObj = JSON.parse(res.text);
-            adminToken = resObj.data.loginBySMSCode.data.accessToken;
-
-            res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     query: queries.getCurrentUser
                 });
             expect(res.status).toBe(200);
-            resObj = JSON.parse(res.text);
+            let resObj = JSON.parse(res.text);
             userId = resObj.data.getCurrentUser.data.id
         });
 
@@ -1076,7 +1074,7 @@ describe('Resource', () => {
             expect(JSON.parse(res.text).data.buyNature.message).toBe("success");
             expect(JSON.parse(res.text).data.buyNature.data.natureId).toBe(natureId);
             expect(JSON.parse(res.text).data.buyNature.data.userId).toBe(userId);
-            expect(JSON.parse(res.text).data.buyNature.data.boughtTime).toBe(Math.floor(Date.now() / 1000));
+            expect(JSON.parse(res.text).data.buyNature.data.boughtTime).not.toBe(0);
             res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
@@ -1279,31 +1277,17 @@ describe('Resource', () => {
     });
 
     describe('NatureAlbum', () => {
-        let adminToken = '';
         let userId = '';
         let natureAlbumId;
         beforeAll(async () => {
             let res = await supertest(app.getHttpServer())
-                .post('/graphql')
-                .send({
-                    query: queries.loginBySMSCode,
-                    variables: {
-                        mobile: '1',
-                        verificationCode: "666"
-                    }
-                });
-            expect(res.status).toBe(200);
-            let resObj = JSON.parse(res.text);
-            adminToken = resObj.data.loginBySMSCode.data.accessToken;
-
-            res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     query: queries.getCurrentUser
                 });
             expect(res.status).toBe(200);
-            resObj = JSON.parse(res.text);
+            let resObj = JSON.parse(res.text);
             userId = resObj.data.getCurrentUser.data.id
         });
 
@@ -1424,7 +1408,7 @@ describe('Resource', () => {
             expect(JSON.parse(res.text).data.buyNatureAlbum.message).toBe("success");
             expect(JSON.parse(res.text).data.buyNatureAlbum.data.natureAlbumId).toBe(natureAlbumId);
             expect(JSON.parse(res.text).data.buyNatureAlbum.data.userId).toBe(userId);
-            expect(JSON.parse(res.text).data.buyNatureAlbum.data.boughtTime).toBe(Math.floor(Date.now() / 1000));
+            expect(JSON.parse(res.text).data.buyNatureAlbum.data.boughtTime).not.toBe(0);
             res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
@@ -1621,31 +1605,17 @@ describe('Resource', () => {
     });
 
     describe('Wander', () => {
-        let adminToken = '';
         let userId = '';
         let wanderId;
         beforeAll(async () => {
             let res = await supertest(app.getHttpServer())
-                .post('/graphql')
-                .send({
-                    query: queries.loginBySMSCode,
-                    variables: {
-                        mobile: '1',
-                        verificationCode: "666"
-                    }
-                });
-            expect(res.status).toBe(200);
-            let resObj = JSON.parse(res.text);
-            adminToken = resObj.data.loginBySMSCode.data.accessToken;
-
-            res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     query: queries.getCurrentUser
                 });
             expect(res.status).toBe(200);
-            resObj = JSON.parse(res.text);
+            let resObj = JSON.parse(res.text);
             userId = resObj.data.getCurrentUser.data.id
         });
 
@@ -1769,7 +1739,7 @@ describe('Resource', () => {
             expect(JSON.parse(res.text).data.buyWander.message).toBe("success");
             expect(JSON.parse(res.text).data.buyWander.data.wanderId).toBe(wanderId);
             expect(JSON.parse(res.text).data.buyWander.data.userId).toBe(userId);
-            expect(JSON.parse(res.text).data.buyWander.data.boughtTime).toBe(Math.floor(Date.now() / 1000));
+            expect(JSON.parse(res.text).data.buyWander.data.boughtTime).not.toBe(0);
             res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
@@ -1972,31 +1942,17 @@ describe('Resource', () => {
     });
 
     describe('WanderAlbum', () => {
-        let adminToken = '';
         let userId = '';
         let wanderAlbumId;
         beforeAll(async () => {
             let res = await supertest(app.getHttpServer())
-                .post('/graphql')
-                .send({
-                    query: queries.loginBySMSCode,
-                    variables: {
-                        mobile: '1',
-                        verificationCode: "666"
-                    }
-                });
-            expect(res.status).toBe(200);
-            let resObj = JSON.parse(res.text);
-            adminToken = resObj.data.loginBySMSCode.data.accessToken;
-
-            res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     query: queries.getCurrentUser
                 });
             expect(res.status).toBe(200);
-            resObj = JSON.parse(res.text);
+            let resObj = JSON.parse(res.text);
             userId = resObj.data.getCurrentUser.data.id
         });
 
@@ -2117,7 +2073,7 @@ describe('Resource', () => {
             expect(JSON.parse(res.text).data.buyWanderAlbum.message).toBe("success");
             expect(JSON.parse(res.text).data.buyWanderAlbum.data.wanderAlbumId).toBe(wanderAlbumId);
             expect(JSON.parse(res.text).data.buyWanderAlbum.data.userId).toBe(userId);
-            expect(JSON.parse(res.text).data.buyWanderAlbum.data.boughtTime).toBe(Math.floor(Date.now() / 1000));
+            expect(JSON.parse(res.text).data.buyWanderAlbum.data.boughtTime).not.toBe(0);
             res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
@@ -2314,42 +2270,409 @@ describe('Resource', () => {
     });
 
     describe('Home', () => {
-        let adminToken = '';
+        let userId = '';
         beforeAll(async () => {
-            const res = await supertest(app.getHttpServer())
+            let res = await supertest(app.getHttpServer())
                 .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
                 .send({
-                    query: queries.loginBySMSCode,
-                    variables: {
-                        mobile: '1',
-                        verificationCode: "666"
-                    }
+                    query: queries.getCurrentUser
                 });
             expect(res.status).toBe(200);
             let resObj = JSON.parse(res.text);
-            adminToken = resObj.data.loginBySMSCode.data.accessToken;
+            userId = resObj.data.getCurrentUser.data.id
         });
-        it.todo('createHome');
-        it.todo('updateHome');
-        it.todo('deleteScene');
-        it.todo('getHome');
-        it.todo('getHomeByPageAndLimit');
-        it.todo('countHome');
-        it.todo('getHomeById');
+        let homeNatureId;
+        it('createHome', async () => {
+            const res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.createHome,
+                    variables: {
+                        data: {
+                            type: "nature",
+                            resourceId: "000000000000000000000000",
+                            background: ["https://i0.hdslb.com/bfs/live/225c6cba878929cd0ca775d118fee75526c78d02.png"],
+                            name: "首页空白自然标签",
+                            description: "自然就是盖亚",
+                            author: userId,
+                            position: 0,
+                            validTime: Math.floor(Date.now() / 1000),
+                        }
+                    }
+                });
+            expect(res.status).toBe(200);
+            expect(JSON.parse(res.text).data.createHome.code).toBe(200);
+            expect(JSON.parse(res.text).data.createHome.message).toBe("success");
+            expect(JSON.parse(res.text).data.createHome.data).toHaveProperty('id');
+            homeNatureId = JSON.parse(res.text).data.createHome.data.id;
+            expect(JSON.parse(res.text).data.createHome.data.name).toBe('首页空白自然标签');
+        });
+        it('updateHome', async () => {
+            let newDescription = '自然其实是乌拉诺斯';
+            const res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.updateHome,
+                    variables: {
+                        id: homeNatureId,
+                        data: {
+                            description: newDescription
+                        }
+                    }
+                });
+            expect(res.status).toBe(200);
+            expect(JSON.parse(res.text).data.updateHome.code).toBe(200);
+            expect(JSON.parse(res.text).data.updateHome.message).toBe("success");
+            expect(JSON.parse(res.text).data.updateHome.data).toHaveProperty('id');
+            expect(JSON.parse(res.text).data.updateHome.data.description).toBe(newDescription);
+            expect(JSON.parse(res.text).data.updateHome.data.name).toBe("首页空白自然标签");
+        });
+        it('deleteHome', async () => {
+            const res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.deleteHome,
+                    variables: {
+                        id: homeNatureId
+                    }
+                });
+            expect(JSON.parse(res.text).data.deleteHome.data.id).toBe(homeNatureId);
+        });
+        it('getHome', async () => {
+            await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.createHome,
+                    variables: {
+                        data: {
+                            type: "mindfulness",
+                            resourceId: "000000000000000000000000",
+                            background: ["https://i0.hdslb.com/bfs/live/225c6cba878929cd0ca775d118fee75526c78d02.png"],
+                            name: "正念",
+                            description: "正念描述",
+                            author: userId,
+                            position: 0,
+                            validTime: Math.floor(Date.now() / 1000),
+                        }
+                    }
+                });
+            let natureRes = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.createHome,
+                    variables: {
+                        data: {
+                            type: "nature",
+                            resourceId: "000000000000000000000000",
+                            background: ["https://i0.hdslb.com/bfs/live/225c6cba878929cd0ca775d118fee75526c78d02.png"],
+                            name: "自然",
+                            description: "自然描述",
+                            author: userId,
+                            position: 1,
+                            validTime: Math.floor(Date.now() / 1000),
+                        }
+                    }
+                });
+            homeNatureId = JSON.parse(natureRes.text).data.createHome.data.id;
+            await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.createHome,
+                    variables: {
+                        data: {
+                            type: "wander",
+                            resourceId: "000000000000000000000000",
+                            background: ["https://i0.hdslb.com/bfs/live/225c6cba878929cd0ca775d118fee75526c78d02.png"],
+                            name: "漫步",
+                            description: "漫步",
+                            author: userId,
+                            position: 2,
+                            validTime: Math.floor(Date.now() / 1000),
+                        }
+                    }
+                });
+            const res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getHome,
+                    variables: {
+                        first: 5
+                    }
+                });
+            expect(JSON.parse(res.text).data.getHome.data.length).toBe(3);
+        });
+        it('getHomeByPageAndLimit', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getHomeByPageAndLimit,
+                    variables: {
+                        page: 1,
+                        limit: 2
+                    }
+                });
+            expect(JSON.parse(res.text).data.getHomeByPageAndLimit.data.length).toBe(2);
+            expect(JSON.parse(res.text).data.getHomeByPageAndLimit.data[1].position).toBe(1);
+        });
+        it('countHome', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.countHome,
+                    variables: {
+                        position: 1
+                    }
+                });
+            expect(JSON.parse(res.text).data.countHome.data).toBe(1);
+            res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.countHome
+                });
+            expect(JSON.parse(res.text).data.countHome.data).toBe(3);
+        });
+        it('getHomeById', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getHomeById,
+                    variables: {
+                        id: homeNatureId
+                    }
+                });
+            expect(JSON.parse(res.text).data.getHomeById.data.id).toBe(homeNatureId);
+        });
     });
 
     describe('New', () => {
-        it.todo('getNew');
+        it('getNew', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .send({
+                    query: queries.getNew,
+                    variables: {
+                        first: 50,
+                    }
+                });
+            expect(JSON.parse(res.text).data.getNew.data.length).toBe(30);
+        });
     });
 
     describe('Discount', () => {
-        it.todo('getDiscount');
-        it.todo('getFree');
-        it.todo('getDiscountByPageAndLimit');
-        it.todo('countDiscount');
-        it.todo('getDiscountByIds');
-        it.todo('createDiscount');
-        it.todo('updateDiscount');
-        it.todo('deleteDiscount');
+        let userId = '';
+        beforeAll(async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getCurrentUser
+                });
+            expect(res.status).toBe(200);
+            let resObj = JSON.parse(res.text);
+            userId = resObj.data.getCurrentUser.data.id
+        });
+        let discountId;
+        let natureId;
+        it('createDiscount', async () => {
+            let createNatureRes = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.createNature,
+                    variables: {
+                        data: {
+                            background: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+                            name: "天生注定被打折",
+                            description: "天生注定被打折的自然",
+                            scenes: [],
+                            price: 100,
+                            author: userId,
+                            audio: 'https://archive.org/download/testmp3testfile/testmp3testfile_64kb.m3u',
+                            copy: '打折的一概不买，只买原价的',
+                            natureAlbums: [],
+                            status: 0,
+                            validTime: Math.floor(Date.now() / 1000),
+                        }
+                    }
+                });
+            natureId = JSON.parse(createNatureRes.text).data.createNature.data.id;
+
+            const res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.createDiscount,
+                    variables: {
+                        data: {
+                            type: "nature",
+                            resourceId: natureId,
+                            background: ["https://i0.hdslb.com/bfs/live/225c6cba878929cd0ca775d118fee75526c78d02.png"],
+                            name: "自然某个打九折",
+                            discount: 90,
+                            beginTime: Math.floor(Date.now() / 1000) - 10000,
+                            endTime: Math.floor(Date.now() / 1000) + 10000,
+                        }
+                    }
+                });
+            expect(res.status).toBe(200);
+            expect(JSON.parse(res.text).data.createDiscount.code).toBe(200);
+            expect(JSON.parse(res.text).data.createDiscount.message).toBe("success");
+            expect(JSON.parse(res.text).data.createDiscount.data).toHaveProperty('id');
+            discountId = JSON.parse(res.text).data.createDiscount.data.id;
+            expect(JSON.parse(res.text).data.createDiscount.data.name).toBe('自然某个打九折');
+            expect(JSON.parse(res.text).data.createDiscount.data.resourceId).toBe(natureId);
+        });
+        it('updateDiscount', async () => {
+            let newName = '打折一时爽，一直打折一直爽';
+            const res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.updateDiscount,
+                    variables: {
+                        id: discountId,
+                        data: {
+                            name: newName
+                        }
+                    }
+                });
+            expect(res.status).toBe(200);
+            expect(JSON.parse(res.text).data.updateDiscount.code).toBe(200);
+            expect(JSON.parse(res.text).data.updateDiscount.message).toBe("success");
+            expect(JSON.parse(res.text).data.updateDiscount.data).toHaveProperty('id');
+            expect(JSON.parse(res.text).data.updateDiscount.data.name).toBe(newName);
+            expect(JSON.parse(res.text).data.updateDiscount.data.discount).toBe(90);
+        });
+        it('deleteDiscount', async () => {
+            const res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.deleteDiscount,
+                    variables: {
+                        id: discountId
+                    }
+                });
+            expect(JSON.parse(res.text).data.deleteDiscount.data.id).toBe(discountId);
+        });
+        it('getDiscount', async () => {
+            const res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getDiscount,
+                    variables: {
+                        id: discountId
+                    }
+                });
+            expect(JSON.parse(res.text).data.getDiscount.data.length).toBe(0);
+        });
+        it('getFree', async () => {
+            await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.createDiscount,
+                    variables: {
+                        data: {
+                            type: "nature",
+                            resourceId: "000000000000000000000000",
+                            background: ["https://i0.hdslb.com/bfs/live/225c6cba878929cd0ca775d118fee75526c78d02.png"],
+                            name: "自然某个不要钱",
+                            discount: 0,
+                            beginTime: Math.floor(Date.now() / 1000) - 10000,
+                            endTime: Math.floor(Date.now() / 1000) + 10000,
+                        }
+                    }
+                });
+            await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.createDiscount,
+                    variables: {
+                        data: {
+                            type: "nature",
+                            resourceId: "000000000000000000000000",
+                            background: ["https://i0.hdslb.com/bfs/live/225c6cba878929cd0ca775d118fee75526c78d02.png"],
+                            name: "自然某个打八折",
+                            discount: 80,
+                            beginTime: Math.floor(Date.now() / 1000) - 10000,
+                            endTime: Math.floor(Date.now() / 1000) + 10000,
+                        }
+                    }
+                });
+
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getDiscount,
+                    variables: {
+                        id: discountId,
+                        discount: 80
+                    }
+                });
+            expect(JSON.parse(res.text).data.getDiscount.data.length).toBe(2);
+
+            res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getFree,
+                    variables: {
+                        id: discountId
+                    }
+                });
+            expect(JSON.parse(res.text).data.getFree.data.length).toBe(1);
+            expect(JSON.parse(res.text).data.getFree.data[0].discount).toBe(0);
+        });
+        let discountIds = [];
+        it('getDiscountByPageAndLimit', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getDiscountByPageAndLimit,
+                    variables: {
+                        page: 1,
+                        limit: 5
+                    }
+                });
+            expect(JSON.parse(res.text).data.getDiscountByPageAndLimit.data.length).toBe(2);
+            discountIds = JSON.parse(res.text).data.getDiscountByPageAndLimit.data.map((discount) => discount.id);
+        });
+        it('countDiscount', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.countDiscount
+                });
+            expect(JSON.parse(res.text).data.countDiscount.data).toBe(2);
+        });
+        it('getDiscountByIds', async () => {
+            let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getDiscountByIds,
+                    variables: { ids: discountIds }
+                });
+            expect(JSON.parse(res.text).data.getDiscountByIds.data[0].id).toBe(discountIds[0]);
+            expect(JSON.parse(res.text).data.getDiscountByIds.data[1].id).toBe(discountIds[1]);
+        });
     });
 });

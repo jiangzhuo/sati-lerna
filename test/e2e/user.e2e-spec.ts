@@ -1,5 +1,8 @@
 import { INestApplication, INestApplicationContext } from '@nestjs/common';
 import * as supertest from 'supertest';
+import { Test } from "@nestjs/testing";
+import { ServiceBroker } from 'moleculer';
+
 
 const mutations = require('./gql/mutations');
 const queries = require('./gql/queries');
@@ -8,8 +11,52 @@ describe('User', () => {
     let app: INestApplication;
 
     beforeAll(async () => {
+        // if (!process['__app__']) {
+        // } else {
+        //     app = process['__app__'];
+        // }
+
+
+        const { AppModule } = require('../../packages/sati/src/app.module');
+        const { ResourceModule } = require('../../packages/sati-resource/src/resource.module');
+        const { UserModule } = require('../../packages/sati-user/src/user.module');
+        const { StatsModule } = require('../../packages/sati-stats/src/stats.module');
+
+        const appModule = await Test.createTestingModule({
+            imports: [AppModule,
+                ResourceModule.forRoot(),
+                UserModule.forRoot(),
+                StatsModule.forRoot()
+            ],
+        }).compile();
+        app = appModule.createNestApplication();
+        await app.init();
+
+        global['__app__'] = app;
+        process['__app__'] = app;
+        process['jiangzhuo'] = 'aaaaaaa';
+
+        // this.global.__app__ = app;
+
+        const broker = appModule.get('MoleculerBroker');
+
+        await broker.waitForServices(["discount", "home", "mindfulness", "mindfulnessAlbum", "nature", "natureAlbum", "wander", "wanderAlbum", "scene"
+            , "coupon", "user"
+            , "operation", "userStats"], 10000, 1000);
+
+
+        // // 进行一些require保证计算覆盖率的时候算到这些
+        // require('../../packages/sati/src/app.module');
+        // require('../../packages/sati-resource/src/resource.module');
+        // require('../../packages/sati-user/src/user.module');
+        // require('../../packages/sati-stats/src/stats.module');
         app = process['__app__'];
     }, 20000000);
+    afterAll(async () => {
+        if (app) {
+            await app.close();
+        }
+    });
 
     describe('User', () => {
         const mobile = `13800138000-${Date.now()}`;

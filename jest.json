@@ -5,16 +5,23 @@
     "js",
     "json"
   ],
+  "testEnvironment": "node",
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
   },
-  "testRegex": "/src/.*\\.(test|spec).(ts|tsx|js)$",
+  "globalSetup": "./test/e2e/setup.ts",
+  "globalTeardown": "./test/e2e/teardown.ts",
+  "testRegex": "/e2e/.*\\.(e2e-test|e2e-spec).(ts|tsx|js)$",
+  "rootDir": "../../",
+  "collectCoverage": true,
   "collectCoverageFrom": [
-    "src/**/*.{js,jsx,tsx,ts}",
+    "!**/*.d.ts",
+    "packages/*/src/**/*.{js,jsx,tsx,ts}",
     "!**/node_modules/**",
     "!**/vendor/**"
   ],
   "coverageReporters": [
+    "text",
     "json",
     "lcov"
   ]
