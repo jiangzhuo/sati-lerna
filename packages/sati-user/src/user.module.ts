@@ -43,7 +43,6 @@ import * as jaeger from 'moleculer-jaeger';
     controllers: [
         // UserController,
         // CouponController,
-        // JaegerController
     ],
     providers: [
         UserController,

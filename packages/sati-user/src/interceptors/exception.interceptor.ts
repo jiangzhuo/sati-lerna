@@ -1,14 +1,7 @@
-import {
-    Injectable,
-    NestInterceptor,
-    ExecutionContext,
-    HttpStatus,
-} from '@nestjs/common';
-import { HttpException } from '@nestjs/common';
+import { ExecutionContext, Injectable, NestInterceptor, } from '@nestjs/common';
 import { RpcException } from "@nestjs/microservices";
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-// import { __ as t } from "i18n";
 
 @Injectable()
 export class ErrorsInterceptor implements NestInterceptor {

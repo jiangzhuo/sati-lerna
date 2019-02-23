@@ -15,8 +15,12 @@
   "rootDir": "../../",
   "collectCoverage": true,
   "collectCoverageFrom": [
-    "packages/*/src/**/*.{js,jsx,tsx,ts}",
+    "packages/sati/src/**/*.{js,jsx,tsx,ts}",
+    "packages/sati-user/src/**/*.{js,jsx,tsx,ts}",
+    "packages/sati-resource/src/**/*.{js,jsx,tsx,ts}",
     "!**/*.d.ts",
+    "!**/main.ts",
+    "!**/hackLogger.ts",
     "!**/node_modules/**",
     "!**/vendor/**"
   ],

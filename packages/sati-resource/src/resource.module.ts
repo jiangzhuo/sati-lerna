@@ -42,7 +42,6 @@ import { Discount } from "./interfaces/discount.interface";
 import { DiscountController } from "./controllers/discount.controller";
 import { DiscountSchema } from "./schemas/discount.schema";
 import { AccountSchema } from "./schemas/account.schema";
-import { JaegerController } from "./controllers/jaeger.controller";
 import * as jaeger from 'moleculer-jaeger';
 
 // const httpclient = require('urllib');
@@ -99,7 +98,6 @@ import * as jaeger from 'moleculer-jaeger';
         // SceneController,
         // HomeController,
         // DiscountController,
-        // JaegerController
     ],
     providers: [
         MindfulnessController,

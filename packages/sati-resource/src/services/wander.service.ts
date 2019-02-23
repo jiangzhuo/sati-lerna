@@ -3,18 +3,16 @@ import { Wander } from "../interfaces/wander.interface";
 import { WanderAlbum } from "../interfaces/wanderAlbum.interface";
 import { WanderRecord } from "../interfaces/wanderRecord.interface";
 import { WanderAlbumRecord } from "../interfaces/wanderAlbumRecord.interface";
-import { Inject, Injectable } from '@nestjs/common';
-import { InjectModel, InjectConnection } from '@nestjs/mongoose';
+import { Injectable } from '@nestjs/common';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import * as moment from "moment";
-import { isEmpty, isNumber, isArray, isBoolean } from 'lodash';
-import { RpcException } from "@nestjs/microservices";
+import { isArray, isBoolean, isEmpty, isNumber } from 'lodash';
 // import { __ as t } from "i18n";
 import * as Moleculer from "moleculer";
-import MoleculerError = Moleculer.Errors.MoleculerError;
 import { User } from "../interfaces/user.interface";
 import { Account } from "../interfaces/account.interface";
-import * as Sentry from "@sentry/node";
 import * as nodejieba from "nodejieba";
+import MoleculerError = Moleculer.Errors.MoleculerError;
 
 @Injectable()
 export class WanderService {
