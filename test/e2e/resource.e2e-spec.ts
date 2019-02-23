@@ -2671,8 +2671,8 @@ describe('Resource', () => {
                     query: queries.getDiscountByIds,
                     variables: { ids: discountIds }
                 });
-            expect(JSON.parse(res.text).data.getDiscountByIds.data[0].id).toBe(discountIds[0]);
-            expect(JSON.parse(res.text).data.getDiscountByIds.data[1].id).toBe(discountIds[1]);
+            expect(discountIds).toContain(JSON.parse(res.text).data.getDiscountByIds.data[0].id);
+            expect(discountIds).toContain(JSON.parse(res.text).data.getDiscountByIds.data[1].id);
         });
     });
 });
