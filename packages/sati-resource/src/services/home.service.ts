@@ -160,15 +160,15 @@ export class HomeService {
 
     async getHome(first = 20, after?: number, before?: number, position?: number) {
         let query = {};
-        if (after) {
-            query['validTime'] = { $gt: after }
+        let validTimeQuery = {  };
+        if (isNumber(after)) {
+            validTimeQuery['$gt'] = after
         }
-        if (before) {
-            if (query['validTime']) {
-                query['validTime']['$lt'] = before
-            } else {
-                query['validTime'] = { $lt: before }
-            }
+        if (isNumber(before)) {
+            validTimeQuery['$lt'] = before
+        }
+        if (isNumber(after) || isNumber(before)) {
+            query['validTime'] = validTimeQuery
         }
         if (isNumber(position)) {
             query['position'] = position

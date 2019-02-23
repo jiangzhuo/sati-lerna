@@ -230,7 +230,6 @@ export class MindfulnessService {
             throw new MoleculerError('already bought', 400);
 
         let finalPrice = Math.floor(mindfulness.price * discountVal / 100);
-
         const session = await this.resourceClient.startSession();
         session.startTransaction();
         try {

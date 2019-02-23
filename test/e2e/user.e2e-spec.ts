@@ -73,7 +73,7 @@ describe('User', () => {
                 .send({
                     query: queries.loginBySMSCode,
                     variables: {
-                        mobile: '1',
+                        mobile: "13800138000",
                         verificationCode: "666"
                     }
                 });
@@ -145,6 +145,33 @@ describe('User', () => {
             expect(resObj.data.loginByMobileAndPassword.data).toHaveProperty('accessToken');
             expect(resObj.data.loginByMobileAndPassword.data).toHaveProperty('expiresIn');
             token = resObj.data.loginByMobileAndPassword.data.accessToken;
+
+            const noMobileRes = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .send({
+                    query: queries.loginByMobileAndPassword,
+                    variables: {
+                        mobile: "1999999999",
+                        password: password
+                    }
+                });
+            expect(noMobileRes.status).toBe(200);
+            let noMobileResObj = JSON.parse(noMobileRes.text);
+
+            expect(noMobileResObj.data.loginByMobileAndPassword.code).toBe(404);
+
+            const wrongPasswordRes = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .send({
+                    query: queries.loginByMobileAndPassword,
+                    variables: {
+                        mobile: mobile,
+                        password: "888"
+                    }
+                });
+            expect(wrongPasswordRes.status).toBe(200);
+            let wrongPasswordResObj = JSON.parse(wrongPasswordRes.text);
+            expect(wrongPasswordResObj.data.loginByMobileAndPassword.code).toBe(406);
         });
 
         it(`sendLoginVerificationCode`, async () => {
@@ -281,6 +308,7 @@ describe('User', () => {
         });
 
         it(`searchUser`, async () => {
+            // 关键字
             let res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
@@ -298,6 +326,44 @@ describe('User', () => {
             expect(resObj.data.searchUser.message).toBe("success");
             expect(resObj.data.searchUser.data.total).toBe(3);
             expect(resObj.data.searchUser.data.data.length).toBe(3);
+            // id
+            res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.searchUser,
+                    variables: {
+                        keyword: userId,
+                        page: 1,
+                        limit: 20
+                    }
+                });
+            expect(res.status).toBe(200);
+            resObj = JSON.parse(res.text);
+            expect(resObj.data.searchUser.code).toBe(200);
+            expect(resObj.data.searchUser.message).toBe("success");
+            expect(resObj.data.searchUser.data.total).toBe(1);
+            expect(resObj.data.searchUser.data.data.length).toBe(1);
+            expect(resObj.data.searchUser.data.data[0].id).toBe(userId);
+            // 手机号
+            res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.searchUser,
+                    variables: {
+                        keyword: "13800138000",
+                        page: 1,
+                        limit: 20
+                    }
+                });
+            expect(res.status).toBe(200);
+            resObj = JSON.parse(res.text);
+            expect(resObj.data.searchUser.code).toBe(200);
+            expect(resObj.data.searchUser.message).toBe("success");
+            expect(resObj.data.searchUser.data.total).toBe(1);
+            expect(resObj.data.searchUser.data.data.length).toBe(1);
+            expect(resObj.data.searchUser.data.data[0].mobile).toBe("13800138000");
         });
 
         it(`countUser`, async () => {
@@ -387,10 +453,41 @@ describe('User', () => {
             expect(resObj.data.updateUserById.data.nickname).toBe(newNickname);
             expect(resObj.data.updateUserById.data.avatar).toBe(newAvatar);
             expect(resObj.data.updateUserById.data.status).toBe(1);
+
+            let noUserRes = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.updateUserById,
+                    variables: {
+                        updateUserInput: {
+                            id: "000000000000000000000000",
+                            nickname: newNickname
+                        }
+                    }
+                });
+            expect(noUserRes.status).toBe(200);
+            let noUserResObj = JSON.parse(noUserRes.text);
+            expect(noUserResObj.data.updateUserById.code).toBe(404);
         });
 
         it(`changeBalanceByAdmin`, async () => {
             let res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.changeBalanceByAdmin,
+                    variables: {
+                        userId: userId,
+                        changeValue: -10,
+                        extraInfo: "change in e2e test"
+                    }
+                });
+            expect(res.status).toBe(200);
+            let resObj = JSON.parse(res.text);
+            expect(resObj.data.changeBalanceByAdmin.code).toBe(402);
+
+            res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
@@ -402,11 +499,10 @@ describe('User', () => {
                     }
                 });
             expect(res.status).toBe(200);
-            let resObj = JSON.parse(res.text);
+            resObj = JSON.parse(res.text);
             expect(resObj.data.changeBalanceByAdmin.code).toBe(200);
             expect(resObj.data.changeBalanceByAdmin.message).toBe("success");
             expect(resObj.data.changeBalanceByAdmin.data.id).toBe(userId);
-
 
             res = await supertest(app.getHttpServer())
                 .post('/graphql')
@@ -465,7 +561,7 @@ describe('User', () => {
                         userId: userId,
                         page: 1,
                         limit: 10,
-                        type: ''
+                        type: 'changeByAdmin'
                     }
                 });
             expect(res.status).toBe(200);
@@ -476,7 +572,6 @@ describe('User', () => {
             expect(resObj.data.searchUserAccount.data[1].value).toBe(1);
             expect(resObj.data.searchUserAccount.data[2].value).toBe(2);
             expect(resObj.data.searchUserAccount.data[3].afterBalance).toBe(16);
-
         });
 
         it(`countUserAccount`, async () => {
@@ -487,7 +582,7 @@ describe('User', () => {
                     query: queries.countUserAccount,
                     variables: {
                         userId: userId,
-                        type: ''
+                        type: 'changeByAdmin'
                     }
                 });
             expect(res.status).toBe(200);

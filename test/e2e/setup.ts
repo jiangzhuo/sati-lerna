@@ -63,11 +63,11 @@ module.exports = async (context) => {
     }
 
     await userCol.insertOne({
-        "mobile": "1",
+        "mobile": "13800138000",
         "password": "$2a$10$GHG8D.Z8.xjsiy71RfhQu.tCwx/Bld6vqjj6nD6eyom8bhMmsIr3m",
         "nickname": "admin",
         "status": 0,
-        "balance": 100007.0,
+        "balance": 0.0,
         "role": 2047.0
     });
 

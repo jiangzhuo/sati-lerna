@@ -75,10 +75,10 @@ export class UserService {
         return user;
     }
 
-    async getUserByIds(ids: string[]): Promise<User[]> {
-        const users = await this.userModel.find({ _id: { $in: ids } }).exec();
-        return users
-    }
+    // async getUserByIds(ids: string[]): Promise<User[]> {
+    //     const users = await this.userModel.find({ _id: { $in: ids } }).exec();
+    //     return users
+    // }
 
     async getUserByMobile(id: string): Promise<User> {
         const user = await this.userModel.findOne({ mobile: id }).exec();

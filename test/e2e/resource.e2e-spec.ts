@@ -54,7 +54,7 @@ describe('Resource', () => {
             .send({
                 query: queries.loginBySMSCode,
                 variables: {
-                    mobile: '1',
+                    mobile: "13800138000",
                     verificationCode: "666"
                 }
             });
@@ -241,7 +241,13 @@ describe('Resource', () => {
             expect(JSON.parse(res.text).data.getScene.data.length).toBe(2);
             expect(JSON.parse(res.text).data.getScene.data[0].id).toBe(sceneId);
             expect(JSON.parse(res.text).data.getScene.data[1].name).toBe('湖畔');
-
+            res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .send({
+                    query: queries.getScene,
+                    variables: { first: 2 }
+                });
+            expect(JSON.parse(res.text).data.getScene.code).toBe(200);
         });
         it('getSceneById', async () => {
             const res = await supertest(app.getHttpServer())
@@ -382,6 +388,28 @@ describe('Resource', () => {
             expect(JSON.parse(res.text).data.favoriteMindfulness.data.favorite).toBe(2);
         });
         it('buyMindfulness', async () => {
+            // 少充一点点，就一点点为了创建collection，充的值肯定不够买的
+            await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.changeBalanceByAdmin,
+                    variables: {
+                        userId: userId,
+                        changeValue: 0,
+                        extraInfo: "change in e2e test for buyMindfulness test"
+                    }
+                });
+            let noEnoughRes = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: mutations.buyMindfulness,
+                    variables: { id: mindfulnessId }
+                });
+
+            expect(JSON.parse(noEnoughRes.text).data.buyMindfulness.code).toBe(402);
+
             await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
@@ -2398,13 +2426,39 @@ describe('Resource', () => {
                         }
                     }
                 });
-            const res = await supertest(app.getHttpServer())
+            let res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     query: queries.getHome,
                     variables: {
-                        first: 5
+                        first: 5,
+                        after: 0,
+                        before: Math.floor(Date.now() / 1000) + 100000
+                    }
+                });
+            console.log(res.text)
+            expect(JSON.parse(res.text).data.getHome.data.length).toBe(3);
+            res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getHome,
+                    variables: {
+                        first: 5,
+                        after: 0,
+                        before: Math.floor(Date.now() / 1000) + 100000,
+                        position: 1
+                    }
+                });
+            expect(JSON.parse(res.text).data.getHome.data.length).toBe(1);
+            res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getHome,
+                    variables: {
+                        first: -5
                     }
                 });
             expect(JSON.parse(res.text).data.getHome.data.length).toBe(3);
@@ -2464,6 +2518,18 @@ describe('Resource', () => {
                     query: queries.getNew,
                     variables: {
                         first: 50,
+                        before: Math.floor(Date.now() / 1000) + 100000
+                    }
+                });
+            expect(JSON.parse(res.text).data.getNew.data.length).toBe(30)
+            res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .send({
+                    query: queries.getNew,
+                    variables: {
+                        first: -50,
+                        after: 1,
+                        before: Math.floor(Date.now() / 1000) + 100000
                     }
                 });
             expect(JSON.parse(res.text).data.getNew.data.length).toBe(30);
@@ -2521,8 +2587,8 @@ describe('Resource', () => {
                             background: ["https://i0.hdslb.com/bfs/live/225c6cba878929cd0ca775d118fee75526c78d02.png"],
                             name: "自然某个打九折",
                             discount: 90,
-                            beginTime: Math.floor(Date.now() / 1000) - 10000,
-                            endTime: Math.floor(Date.now() / 1000) + 10000,
+                            beginTime: 1000,
+                            endTime: 5000,
                         }
                     }
                 });
@@ -2536,6 +2602,12 @@ describe('Resource', () => {
         });
         it('updateDiscount', async () => {
             let newName = '打折一时爽，一直打折一直爽';
+            let newType = 'nature';
+            let newResourceId = '000000000000000000000000';
+            let newBackground = 'https://yt3.ggpht.com/-p-S-magPRTs/AAAAAAAAAAI/AAAAAAAAAAA/VkK9BqrRyuU/s48-c-k-no-mo-rj-c0xffffff/photo.jpg';
+            let newDiscount = 80;
+            let newBeginTime = 0;
+            let newEndTime = 10000000;
             const res = await supertest(app.getHttpServer())
                 .post('/graphql')
                 .set('Authorization', `Bearer ${adminToken}`)
@@ -2544,7 +2616,13 @@ describe('Resource', () => {
                     variables: {
                         id: discountId,
                         data: {
-                            name: newName
+                            name: newName,
+                            type: newType,
+                            resourceId: newResourceId,
+                            discount: newDiscount,
+                            background: newBackground,
+                            beginTime: newBeginTime,
+                            endTime: newEndTime
                         }
                     }
                 });
@@ -2553,7 +2631,8 @@ describe('Resource', () => {
             expect(JSON.parse(res.text).data.updateDiscount.message).toBe("success");
             expect(JSON.parse(res.text).data.updateDiscount.data).toHaveProperty('id');
             expect(JSON.parse(res.text).data.updateDiscount.data.name).toBe(newName);
-            expect(JSON.parse(res.text).data.updateDiscount.data.discount).toBe(90);
+            expect(JSON.parse(res.text).data.updateDiscount.data.type).toBe(newType);
+            expect(JSON.parse(res.text).data.updateDiscount.data.discount).toBe(80);
         });
         it('deleteDiscount', async () => {
             const res = await supertest(app.getHttpServer())
@@ -2609,8 +2688,8 @@ describe('Resource', () => {
                             background: ["https://i0.hdslb.com/bfs/live/225c6cba878929cd0ca775d118fee75526c78d02.png"],
                             name: "自然某个打八折",
                             discount: 80,
-                            beginTime: Math.floor(Date.now() / 1000) - 10000,
-                            endTime: Math.floor(Date.now() / 1000) + 10000,
+                            beginTime: 1000,
+                            endTime: 5000,
                         }
                     }
                 });
@@ -2626,6 +2705,20 @@ describe('Resource', () => {
                     }
                 });
             expect(JSON.parse(res.text).data.getDiscount.data.length).toBe(2);
+
+            res = await supertest(app.getHttpServer())
+                .post('/graphql')
+                .set('Authorization', `Bearer ${adminToken}`)
+                .send({
+                    query: queries.getDiscount,
+                    variables: {
+                        id: discountId,
+                        before: 4000,
+                        after: 0,
+                        first: -1
+                    }
+                });
+            expect(JSON.parse(res.text).data.getDiscount.data.length).toBe(1);
 
             res = await supertest(app.getHttpServer())
                 .post('/graphql')
