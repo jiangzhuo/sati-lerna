@@ -1,6 +1,6 @@
 import { Controller, FileInterceptor, Post, UploadedFile, UseInterceptors, Get } from '@nestjs/common';
-import OSS from 'ali-oss';
-import hasha from 'hasha';
+import * as OSS from 'ali-oss';
+import * as hasha from 'hasha';
 import { getExtension } from 'mime';
 
 import { ErrorsInterceptor } from '../../common/interceptors';
@@ -15,11 +15,21 @@ export class UploadController {
         // }, 10000);
     }
 
-    // @Get('hello')
-    // // @Configurable()
-    // async hello() {
-    //     return { data: this.config.get('my.parameter', 'default value') };
-    // }
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('file'))
+    async upload(@UploadedFile() file) {
+        const client = new OSS({
+            region: process.env.OSS_REGION,
+            accessKeyId: process.env.OSS_ACCESS_KEY_ID,
+            accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
+            bucket: process.env.OSS_BUCKET,
+            internal: true,
+        });
+        const fileName = `${hasha(file.buffer, { algorithm: 'md5' })}.${getExtension(file.mimetype)}`;
+        const filename = `test/${fileName}`;
+        await client.put(filename, file.buffer);
+        return { code: 200, message: 'upload avatar success', data: fileName };
+    }
 
     @Post('uploadAvatar')
     @UseInterceptors(FileInterceptor('file'))
