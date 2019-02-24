@@ -44,6 +44,10 @@ async function bootstrap() {
         { dataId: 'WHITELIST_OPERATION_NAME', group: 'sati' },
         { dataId: 'AUTH_TOKEN_SECRET_KEY', group: 'sati' },
         { dataId: 'TRANSPORTER', group: 'sati' },
+        // { dataId: 'STS_ACCESS_KEY_ID', group: 'sati' },
+        // { dataId: 'STS_ACCESS_KEY_SECRET', group: 'sati' },
+        // { dataId: 'STS_ENDPOINT', group: 'sati' },
+        // { dataId: 'OSS_ROLE_ARN', group: 'sati' },
     ];
     const getAllConfigPromise = [];
     allConfigs.forEach((config) => {
