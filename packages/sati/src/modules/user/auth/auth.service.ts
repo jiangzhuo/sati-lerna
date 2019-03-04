@@ -7,6 +7,7 @@ import gql from 'graphql-tag';
 // import { NotaddGrpcClientFactory } from '../../../grpc/grpc.client-factory';
 import { Errors, ServiceBroker } from 'moleculer';
 import { InjectBroker } from 'nestjs-moleculer';
+import { IncomingMessage } from 'http';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -27,29 +28,32 @@ export class AuthService implements OnModuleInit {
          * whitelist
          */
         const whiteList = JSON.parse(process.env.WHITELIST_OPERATION_NAME);
-        const query = gql(req.body.query);
-        if (query.definitions.every((definition) => {
-            return definition.name.value !== req.body.operationName;
-        })) {
-            req.body.operationName = query.definitions[0].name.value;
-        }
-        // if (req.body.operationName === 'IntrospectionQuery') {
-        //     return;
-        // }
-        if (whiteList.includes(req.body.operationName)) {
-            return;
-        }
-        // fix operationName
-        if (req.body && req.body.operationName) {
-            // if (whiteList.includes(req.body.operationName)) {
+        if (req.body.query) {
+            const query = gql(req.body.query);
+            if (query.definitions.length !== 0 && query.definitions.every((definition) => {
+                return definition.name.value !== req.body.operationName;
+            })) {
+                req.body.operationName = query.definitions[0].name.value;
+            }
+            // if (req.body.operationName === 'IntrospectionQuery') {
             //     return;
             // }
-            const operationName = req.body.operationName;
-            req.body.operationName = operationName.charAt(0).toLowerCase() + operationName.slice(1);
-            // if (whiteList.includes(req.body.operationName)) {
-            //     return;
-            // }
+            if (whiteList.includes(req.body.operationName)) {
+                return;
+            }
+            // fix operationName
+            if (req.body && req.body.operationName) {
+                // if (whiteList.includes(req.body.operationName)) {
+                //     return;
+                // }
+                const operationName = req.body.operationName;
+                req.body.operationName = operationName.charAt(0).toLowerCase() + operationName.slice(1);
+                // if (whiteList.includes(req.body.operationName)) {
+                //     return;
+                // }
+            }
         }
+
 
         let token = req.headers.authorization as string;
         if (!token) {
@@ -77,7 +81,7 @@ export class AuthService implements OnModuleInit {
                     });
                 return data;
             } catch (error) {
-                Sentry.captureException(error);
+                // Sentry.captureException(error);
                 if (error instanceof jwt.JsonWebTokenError) {
                     throw new AuthenticationError('The authorization code is incorrect');
                     // return;

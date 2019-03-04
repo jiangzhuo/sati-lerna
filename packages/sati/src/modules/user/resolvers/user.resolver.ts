@@ -1,19 +1,18 @@
 import { Logger, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
-// import { __ as t } from 'i18n';
-
-import { Permission, Resource } from '../../../common/decorators';
+import { Permission } from '../../../common/decorators';
 import { CommonResult } from '../../../common/interfaces';
 // import { NotaddGrpcClientFactory } from '../../../grpc/grpc.client-factory';
 import { AuthGuard } from '../auth/auth.guard';
 import { ServiceBroker } from 'moleculer';
 import { InjectBroker } from 'nestjs-moleculer';
-import { ErrorsInterceptor, LoggingInterceptor } from '../../../common/interceptors';
+import { LoggingInterceptor } from '../../../common/interceptors';
+
+// import { __ as t } from 'i18n';
 
 @Resolver()
 @UseGuards(AuthGuard)
 // @Resource({ name: 'user_manage', identify: 'user:manage' })
-@UseInterceptors(ErrorsInterceptor)
 @UseInterceptors(LoggingInterceptor)
 export class UserResolver {
     onModuleInit() {

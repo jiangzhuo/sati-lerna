@@ -1,13 +1,11 @@
-import { Controller, FileInterceptor, Post, UploadedFile, UseInterceptors, Get } from '@nestjs/common';
+import { Controller, FileInterceptor, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import * as OSS from 'ali-oss';
 import * as hasha from 'hasha';
 import { getExtension } from 'mime';
 
-import { ErrorsInterceptor } from '../../common/interceptors';
 // import { Configurable, ConfigParam, ConfigService } from 'nestjs-config';
 
 @Controller()
-@UseInterceptors(ErrorsInterceptor)
 export class UploadController {
     constructor() {
         // setTimeout(() => {
@@ -23,7 +21,7 @@ export class UploadController {
             accessKeyId: process.env.OSS_ACCESS_KEY_ID,
             accessKeySecret: process.env.OSS_ACCESS_KEY_SECRET,
             bucket: process.env.OSS_BUCKET,
-            internal: true,
+            // internal: true,
         });
         const fileName = `${hasha(file.buffer, { algorithm: 'md5' })}.${getExtension(file.mimetype)}`;
         const filename = `test/${fileName}`;

@@ -1,0 +1,48 @@
+import 'reflect-metadata';
+
+import { DynamicModule, Inject, Module, OnModuleInit } from '@nestjs/common';
+import { ModulesContainer } from '@nestjs/core/injector/modules-container';
+import { MetadataScanner } from '@nestjs/core/metadata-scanner';
+
+import { PurchaseResolver } from './resolvers/purchase.resolver';
+import { MoleculerModule } from 'nestjs-moleculer';
+import * as jaeger from 'moleculer-jaeger';
+
+// @Global()
+@Module({
+    imports: [
+        MoleculerModule.forRoot({
+            namespace: 'sati',
+            metrics: true,
+            // logger: bindings => new Logger(),
+            transporter: process.env.TRANSPORTER,
+            cacher: "Memory",
+            logLevel: process.env.LOG_LEVEL,
+        }),
+        MoleculerModule.forFeature([{
+            name: 'jaeger',
+            schema: jaeger,
+        }]),
+    ],
+    providers: [
+        PurchaseResolver,
+    ]
+})
+export class PurchaseModule implements OnModuleInit {
+    private readonly metadataScanner: MetadataScanner;
+
+    constructor(
+        @Inject(ModulesContainer) private readonly modulesContainer: ModulesContainer,
+    ) {
+        this.metadataScanner = new MetadataScanner();
+    }
+
+    static forRoot(): DynamicModule {
+        return {
+            module: PurchaseModule,
+        };
+    }
+
+    async onModuleInit() {
+    }
+}

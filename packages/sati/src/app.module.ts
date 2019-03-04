@@ -1,7 +1,6 @@
-import { Module, Global } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
-
 // import { AppResolver } from './app.resolver';
 import { ErrorsInterceptor } from './common/interceptors';
 import { GraphQLConfigService } from './graphql-config.service';
@@ -11,6 +10,7 @@ import { ResourceModule } from './modules/resource/resource.module';
 import { StatsModule } from './modules/stats/stats.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { DownloadModule } from './modules/download/download.module';
+import { PurchaseModule } from './modules/purchase/purchase.module';
 
 
 @Global()
@@ -24,6 +24,7 @@ import { DownloadModule } from './modules/download/download.module';
         ResourceModule,
         StatsModule,
         UserModule,
+        PurchaseModule,
     ],
     providers: [
         {

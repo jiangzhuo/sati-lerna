@@ -13,6 +13,8 @@ import { CryptoUtil } from './utils/crypto.util';
 import { MoleculerModule } from 'nestjs-moleculer';
 import { UserController } from './controllers/user.controller';
 import { CouponController } from './controllers/coupon.controller';
+import { PurchaseSchema } from "./schemas/purchase.schema";
+import { PurchaseController } from "./controllers/purchase.controller";
 import { CouponSchema } from './schemas/coupon.schema';
 import { CouponService } from "./services/coupon.service";
 import * as jaeger from 'moleculer-jaeger';
@@ -39,6 +41,7 @@ import * as jaeger from 'moleculer-jaeger';
         MongooseModule.forFeature([{ name: 'User', schema: UserSchema, collection: 'user' }], 'sati'),
         MongooseModule.forFeature([{ name: 'Account', schema: AccountSchema, collection: 'account' }], 'sati'),
         MongooseModule.forFeature([{ name: 'Coupon', schema: CouponSchema, collection: 'coupon' }], 'sati'),
+        MongooseModule.forFeature([{ name: 'Purchase', schema: PurchaseSchema, collection: 'purchase' }], 'sati'),
     ],
     controllers: [
         // UserController,
@@ -47,6 +50,7 @@ import * as jaeger from 'moleculer-jaeger';
     providers: [
         UserController,
         CouponController,
+        PurchaseController,
         AuthService,
         UserService,
         CouponService,

@@ -1,15 +1,14 @@
 import { Logger, UseGuards, UseInterceptors } from '@nestjs/common';
-import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
 
 import { AuthGuard } from '../../user/auth/auth.guard';
 import { ServiceBroker } from 'moleculer';
 import { InjectBroker } from 'nestjs-moleculer';
-import { ErrorsInterceptor, LoggingInterceptor } from '../../../common/interceptors';
+import { LoggingInterceptor } from '../../../common/interceptors';
 import { Permission } from '../../../common/decorators';
 
 @Resolver()
 @UseGuards(AuthGuard)
-@UseInterceptors(ErrorsInterceptor)
 @UseInterceptors(LoggingInterceptor)
 export class StatsResolver {
     onModuleInit() {
@@ -22,7 +21,7 @@ export class StatsResolver {
 
     private logger = new Logger('stats');
 
-    @Query('helloStat')
+    @Query('sayStatHello')
     async helloStat() {
         return { code: 200, message: 'success' };
     }

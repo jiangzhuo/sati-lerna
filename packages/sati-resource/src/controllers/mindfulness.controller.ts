@@ -108,6 +108,7 @@ export class MindfulnessController extends Service {
     }
 
     async getMindfulnessRecordByMindfulnessId(ctx: Context) {
+        throw new Error('what the fuck')
         return { data: await this.mindfulnessService.getMindfulnessRecord(ctx.params.userId, ctx.params.mindfulnessId) };
     }
 

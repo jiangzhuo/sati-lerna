@@ -1,5 +1,5 @@
 type Query {
-    helloStat: HelloStatResponse
+    sayStatHello: HelloStatResponse
     "用户量"
     userCount(from:Int,to:Int): StatsNumberResponse
     "登录量"

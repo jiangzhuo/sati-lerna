@@ -4,11 +4,10 @@ import { Permission } from '../../../common/decorators';
 import { AuthGuard } from '../../user/auth/auth.guard';
 import { InjectBroker } from 'nestjs-moleculer';
 import { ServiceBroker } from 'moleculer';
-import { ErrorsInterceptor, LoggingInterceptor } from '../../../common/interceptors';
+import { LoggingInterceptor } from '../../../common/interceptors';
 
 @Resolver()
 @UseGuards(AuthGuard)
-@UseInterceptors(ErrorsInterceptor)
 @UseInterceptors(LoggingInterceptor)
 export class DiscountResolver {
     onModuleInit() {

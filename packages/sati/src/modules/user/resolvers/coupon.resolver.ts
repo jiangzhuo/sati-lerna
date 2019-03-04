@@ -1,17 +1,15 @@
 import { Logger, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { Permission, Resource } from '../../../common/decorators';
-import { CommonResult } from '../../../common/interfaces';
+import { Permission } from '../../../common/decorators';
 import { AuthGuard } from '../auth/auth.guard';
 import { ServiceBroker } from 'moleculer';
 import { InjectBroker } from 'nestjs-moleculer';
-import { ErrorsInterceptor, LoggingInterceptor } from '../../../common/interceptors';
+import { LoggingInterceptor } from '../../../common/interceptors';
 
 @Resolver()
 @UseGuards(AuthGuard)
 // @Resource({ name: 'user_manage', identify: 'user:manage' })
-@UseInterceptors(ErrorsInterceptor)
 @UseInterceptors(LoggingInterceptor)
 export class CouponResolver {
     onModuleInit() {
