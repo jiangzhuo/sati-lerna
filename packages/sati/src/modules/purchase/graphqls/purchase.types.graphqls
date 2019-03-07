@@ -12,5 +12,11 @@ type HelloPurchaseResponse {
 type AppleValidateResponse {
     code: Int
     message: String
-    data: Boolean
+    data: AppleValidateResponseData
+}
+
+type AppleValidateResponseData {
+    isValidated: Boolean,
+    isCanceled: [Boolean],
+    isExpired: [Boolean]
 }

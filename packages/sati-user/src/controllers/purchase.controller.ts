@@ -47,16 +47,32 @@ export class PurchaseController extends Service {
 
     async apple(ctx: Context) {
         let receipt = ctx.params.receipt;
-        let insertResult = await this.purchaseModel.insertMany({ type: 'apple', receipt: receipt });
+        let userId = ctx.params.userId;
+        let findResult = await this.purchaseModel.findOne({ receipt: receipt });
+        if (findResult) {
+            if (findResult.userId.toString() !== userId) {
+                throw new Error('other user already had this receipt');
+            }
+        }
+        // let insertResult = await this.purchaseModel.insertMany({
+        //     type: 'apple',
+        //     userId: ctx.params.userId,
+        //     receipt: receipt
+        // });
         iap.config({ applePassword: process.env.APPLE_SHARED_SECRECT || '' });
-        await iap.setup({
-            test: false,
-            verbose: true
-        });
+        await iap.setup();
         let validateData = await iap.validate(ctx.params.receipt);
         let isValidated = await iap.isValidated(validateData);
         let purchaseData = iap.getPurchaseData(validateData);
-        await this.purchaseModel.updateOne({_id:insertResult[0]._id},{validateData:validateData,purchaseData:purchaseData});
-        return { data: isValidated };
+        let isCanceled = await Promise.all(purchaseData.map(data => iap.isCanceled(data)));
+        let isExpired = await Promise.all(purchaseData.map(data => iap.isExpired(data)));
+        await this.purchaseModel.updateOne({ receipt: receipt }, {
+            type: 'apple',
+            userId: ctx.params.userId,
+            receipt: receipt,
+            validateData: JSON.stringify(validateData),
+            purchaseData: JSON.stringify(purchaseData)
+        }, { upsert: true });
+        return { isValidated: isValidated, isCanceled: isCanceled, isExpired: isExpired };
     }
 }

@@ -27,8 +27,18 @@ export class PurchaseResolver {
     }
 
     @Query('appleValidate')
-    async appleValidate(req, body) {
-        const { data } = await this.userBroker.call('purchase.apple', body);
-        return { code: 200, message: 'success', data: data };
+    async appleValidate(req, body, context) {
+        const appleValidateRes = await this.userBroker.call('purchase.apple', { userId: context.user.id, receipt: body.receipt },            {
+            meta: {
+                udid: context.udid,
+                operationName: context.operationName,
+                clientIp: context.clientIp,
+            },
+        });
+        // 判断appleValidateRes然后做点什么
+        if(appleValidateRes.isValidated){
+            // 验证过了的话，要不要给加上对应的钱
+        }
+        return { code: 200, message: 'success', data: appleValidateRes };
     }
 }
