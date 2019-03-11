@@ -1,6 +1,7 @@
 type Query {
     sayPurchaseHello(name: String): HelloPurchaseResponse
     appleValidate(receipt: String): AppleValidateResponse
+    searchReceipt(type: String, page: Int, limit: Int): SearchReceiptResponse
 }
 
 type HelloPurchaseResponse {
@@ -13,6 +14,27 @@ type AppleValidateResponse {
     code: Int
     message: String
     data: AppleValidateResponseData
+}
+
+type SearchReceiptResponse {
+    code: Int
+    message: String
+    data:SearchReceiptResponseData
+}
+
+
+type SearchReceiptResponseData {
+    total: Int,
+    data: [Receipt]
+}
+
+type Receipt {
+    id: String,
+    type: String,
+    userId: String,
+    receipt: String,
+    purchaseData: String,
+    validateData: String
 }
 
 type AppleValidateResponseData {

@@ -1,0 +1,11 @@
+query appleValidate($receipt: String){
+    appleValidate(receipt: $receipt){
+        code
+        message
+        data{
+            isValidated
+            isCanceled
+            isExpired
+        }
+    }
+}

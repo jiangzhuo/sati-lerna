@@ -1,0 +1,7 @@
+query sayPurchaseHello($name: String){
+    sayPurchaseHello(name: $name){
+        code
+        message
+        data
+    }
+}

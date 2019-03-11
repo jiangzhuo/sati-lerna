@@ -1,0 +1,17 @@
+query searchReceipt($type: String, $page: Int, $limit: Int){
+    searchReceipt(type: $type, page: $page, limit: $limit){
+        code
+        message
+        data{
+            total
+            data{
+                id
+                type
+                userId
+                receipt
+                purchaseData
+                validateData
+            }
+        }
+    }
+}

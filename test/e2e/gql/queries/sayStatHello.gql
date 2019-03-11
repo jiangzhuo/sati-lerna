@@ -1,0 +1,6 @@
+query sayStatHello{
+    sayStatHello{
+        code
+        message
+    }
+}

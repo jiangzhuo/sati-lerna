@@ -6,6 +6,7 @@ import * as iap from 'in-app-purchase';
 import { Model } from "mongoose";
 import { Purchase } from "../interfaces/purchase.interface";
 import { InjectModel } from '@nestjs/mongoose';
+import { isEmpty } from 'lodash';
 
 @Injectable()
 export class PurchaseController extends Service {
@@ -25,7 +26,8 @@ export class PurchaseController extends Service {
                 upperCase: true
             },
             actions: {
-                apple: this.apple
+                apple: this.apple,
+                search: this.search
             },
             created: this.serviceCreated,
             started: this.serviceStarted,
@@ -45,9 +47,23 @@ export class PurchaseController extends Service {
         this.logger.info("purchase service stopped.");
     }
 
+    async search(ctx: Context) {
+        let query = {};
+        let page = ctx.params.page;
+        let limit = ctx.params.limit;
+        // 构建条件搜索purchase
+        if (!isEmpty(ctx.params.type)) {
+            query['type'] = ctx.params.type;
+        }
+        let data = await this.purchaseModel.find(query, null, { limit: limit, skip: (page - 1) * limit }).exec();
+        let total = await this.purchaseModel.countDocuments(query).exec();
+        return { total, data }
+    }
+
     async apple(ctx: Context) {
         let receipt = ctx.params.receipt;
         let userId = ctx.params.userId;
+        await this.purchaseModel.insertMany({ type: 'received', receipt: receipt });
         let findResult = await this.purchaseModel.findOne({ receipt: receipt });
         if (findResult) {
             if (findResult.userId.toString() !== userId) {
