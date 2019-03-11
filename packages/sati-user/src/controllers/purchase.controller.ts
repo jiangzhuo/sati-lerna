@@ -65,7 +65,7 @@ export class PurchaseController extends Service {
         let userId = ctx.params.userId;
         await this.purchaseModel.insertMany({ type: 'received', receipt: receipt });
         let findResult = await this.purchaseModel.findOne({ receipt: receipt });
-        if (findResult) {
+        if (findResult && findResult.userId) {
             if (findResult.userId.toString() !== userId) {
                 throw new Error('other user already had this receipt');
             }

@@ -16,19 +16,23 @@ export class ErrorsInterceptor implements NestInterceptor {
                 code = error.getStatus();
                 message = error.getResponse();
                 this.logger.error(`${code}\t${message}`);
-                return throwError(error)
+                // return throwError(error)
             } else if (error.code) {
                 code = error.code;
                 message = error.message || error.details || JSON.stringify(error.data) || '';
                 this.logger.error(`${code}\t${message}`);
-                return throwError(new HttpException(message, code))
+                // return throwError(new HttpException(message, code))
             } else {
                 // Sentry.captureException(error);
                 code = 500;
                 message = error.message || 'unknow error';
                 this.logger.error(`${code}\t${message}`);
-                return throwError(new HttpException(message, code))
+                // return throwError(new HttpException(message, code))
             }
+            return Promise.resolve({
+                code,
+                message,
+            });
         }));
     }
 }
