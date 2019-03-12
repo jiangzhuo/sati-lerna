@@ -1,5 +1,5 @@
-query appleValidate($receipt: String){
-    appleValidate(receipt: $receipt){
+query appleValidate($userId: String, $receipt: String){
+    appleValidate(userId: $userId, receipt: $receipt){
         code
         message
         data{

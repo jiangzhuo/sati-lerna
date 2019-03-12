@@ -1,9 +1,10 @@
 import { Document } from "mongoose";
 
 export interface Purchase extends Document {
+    readonly productId: string,
+    readonly bundleId: string,
     readonly type: string,
-    readonly receipt: string,
-    readonly userId: string,
-    readonly validateData: string,
-    readonly purchaseData: string,
+    readonly price: number,
+    readonly createTime: number,
+    readonly updateTime: number
 }

@@ -1,5 +1,5 @@
 import { Logger, UseGuards, UseInterceptors } from '@nestjs/common';
-import { Query, Resolver } from '@nestjs/graphql';
+import { Query, Resolver, Mutation } from '@nestjs/graphql';
 
 import { AuthGuard } from '../../user/auth/auth.guard';
 import { ServiceBroker } from 'moleculer';
@@ -47,8 +47,8 @@ export class PurchaseResolver {
 
     @Query('searchReceipt')
     @Permission('admin')
-    async searchPurchase(req, body, context) {
-        const appleValidateRes = await this.userBroker.call('purchase.search', {
+    async searchReceipt(req, body, context) {
+        const appleValidateRes = await this.userBroker.call('purchase.searchReceipt', {
             type: body.type,
             page: body.page,
             limit: body.limit,
@@ -64,5 +64,36 @@ export class PurchaseResolver {
             // 验证过了的话，要不要给加上对应的钱
         }
         return { code: 200, message: 'success', data: appleValidateRes };
+    }
+
+    @Mutation('createPurchase')
+    @Permission('editor')
+    async createPurchase(req, body, context, resolveInfo) {
+        const data = await this.userBroker.call('purchase.createPurchase', body.data);
+        // tslint:disable-next-line:max-line-length
+        this.logger.log(`${context.user && context.user.id}\t${context.udid}\t${context.clientIp}\t${context.operationName}\t${resolveInfo.fieldName}\t${JSON.stringify(data)}`);
+        return { code: 200, message: 'success', data };
+    }
+
+    @Mutation('deletePurchase')
+    @Permission('editor')
+    async deletePurchase(req, body: { id: string }, context, resolveInfo) {
+        const data = await this.userBroker.call('purchase.deletePurchase', body);
+        // tslint:disable-next-line:max-line-length
+        this.logger.log(`${context.user && context.user.id}\t${context.udid}\t${context.clientIp}\t${context.operationName}\t${resolveInfo.fieldName}\t${JSON.stringify(data)}`);
+        return { code: 200, message: 'success', data };
+    }
+
+    @Query('searchPurchase')
+    @Permission('editor')
+    async searchPurchase(req, body, context, resolveInfo) {
+        const data = await this.userBroker.call('purchase.searchPurchase', {
+            type: body.type,
+            page: body.page,
+            limit: body.limit,
+        });
+        // tslint:disable-next-line:max-line-length
+        this.logger.log(`${context.user && context.user.id}\t${context.udid}\t${context.clientIp}\t${context.operationName}\t${resolveInfo.fieldName}\t${JSON.stringify(data)}`);
+        return { code: 200, message: 'success', data };
     }
 }

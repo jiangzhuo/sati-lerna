@@ -4,14 +4,17 @@ import { InjectBroker } from 'nestjs-moleculer';
 import { Context, Errors, Service, ServiceBroker } from 'moleculer';
 import * as iap from 'in-app-purchase';
 import { Model } from "mongoose";
+import { Receipt } from "../interfaces/receipt.interface";
 import { Purchase } from "../interfaces/purchase.interface";
 import { InjectModel } from '@nestjs/mongoose';
 import { isEmpty } from 'lodash';
+import * as moment from "moment";
 
 @Injectable()
 export class PurchaseController extends Service {
     constructor(
         @InjectBroker() broker: ServiceBroker,
+        @InjectModel('Receipt') private readonly receiptModel: Model<Receipt>,
         @InjectModel('Purchase') private readonly purchaseModel: Model<Purchase>,
         @Inject(AuthService) private readonly authService: AuthService
     ) {
@@ -27,7 +30,10 @@ export class PurchaseController extends Service {
             },
             actions: {
                 apple: this.apple,
-                search: this.search
+                searchReceipt: this.searchReceipt,
+                searchPurchase: this.searchPurchase,
+                createPurchase: this.createPurchase,
+                deletePurchase: this.deletePurchase,
             },
             created: this.serviceCreated,
             started: this.serviceStarted,
@@ -47,7 +53,7 @@ export class PurchaseController extends Service {
         this.logger.info("purchase service stopped.");
     }
 
-    async search(ctx: Context) {
+    async searchPurchase(ctx: Context) {
         let query = {};
         let page = ctx.params.page;
         let limit = ctx.params.limit;
@@ -60,21 +66,48 @@ export class PurchaseController extends Service {
         return { total, data }
     }
 
+    async createPurchase(ctx: Context) {
+        let data = ctx.params;
+        data.createTime = moment().unix();
+        data.updateTime = moment().unix();
+        return await this.purchaseModel.create(data)
+    }
+
+    async deletePurchase(ctx: Context) {
+        return await this.purchaseModel.findOneAndRemove({ _id: ctx.params.id });
+    }
+
+    async searchReceipt(ctx: Context) {
+        let query = {};
+        let page = ctx.params.page;
+        let limit = ctx.params.limit;
+        // 构建条件搜索purchase
+        if (!isEmpty(ctx.params.type)) {
+            query['type'] = ctx.params.type;
+        }
+        let data = await this.receiptModel.find(query, null, { limit: limit, skip: (page - 1) * limit }).exec();
+        let total = await this.receiptModel.countDocuments(query).exec();
+        return { total, data }
+    }
+
     async apple(ctx: Context) {
         let receipt = ctx.params.receipt;
         let userId = ctx.params.userId;
-        await this.purchaseModel.insertMany({ type: 'received', receipt: receipt });
-        let findResult = await this.purchaseModel.findOne({ receipt: receipt });
-        if (findResult && findResult.userId) {
-            if (findResult.userId.toString() !== userId) {
+        await this.receiptModel.insertMany({ type: 'received', receipt: receipt, userId: ctx.params.userId });
+        let findResult = await this.receiptModel.find({ receipt: receipt, type: 'apple' }).exec();
+        // if (findResult && findResult.length > 0) {
+        //     if (findResult.userId.toString() !== userId) {
+        //         throw new Error('other user already had this receipt');
+        //     }
+        //     // else if (findResult.validateData) {
+        //     //     throw new Error('you already commit this receipt and already validate')
+        //     // }
+        // }
+        for (let res of findResult) {
+            if (res.userId.toString() !== userId) {
                 throw new Error('other user already had this receipt');
             }
         }
-        // let insertResult = await this.purchaseModel.insertMany({
-        //     type: 'apple',
-        //     userId: ctx.params.userId,
-        //     receipt: receipt
-        // });
         iap.config({ applePassword: process.env.APPLE_SHARED_SECRECT || '' });
         await iap.setup();
         let validateData = await iap.validate(ctx.params.receipt);
@@ -82,13 +115,18 @@ export class PurchaseController extends Service {
         let purchaseData = iap.getPurchaseData(validateData);
         let isCanceled = await Promise.all(purchaseData.map(data => iap.isCanceled(data)));
         let isExpired = await Promise.all(purchaseData.map(data => iap.isExpired(data)));
-        await this.purchaseModel.updateOne({ receipt: receipt }, {
+        let purchaseRecord = await this.receiptModel.insertMany({
             type: 'apple',
             userId: ctx.params.userId,
             receipt: receipt,
             validateData: JSON.stringify(validateData),
             purchaseData: JSON.stringify(purchaseData)
-        }, { upsert: true });
-        return { isValidated: isValidated, isCanceled: isCanceled, isExpired: isExpired };
+        });
+        return {
+            isValidated: isValidated,
+            isCanceled: isCanceled,
+            isExpired: isExpired,
+            purchaseRecord: purchaseRecord
+        };
     }
 }
