@@ -34,6 +34,7 @@ export class PurchaseController extends Service {
                 searchPurchase: this.searchPurchase,
                 createPurchase: this.createPurchase,
                 deletePurchase: this.deletePurchase,
+                getPurchaseByProductId: this.getPurchaseByProductId
             },
             created: this.serviceCreated,
             started: this.serviceStarted,
@@ -80,6 +81,10 @@ export class PurchaseController extends Service {
         return await this.purchaseModel.findOneAndRemove({ _id: ctx.params.id });
     }
 
+    async getPurchaseByProductId(ctx: Context) {
+        return await this.purchaseModel.findOne({ productId: ctx.params.productId })
+    }
+
     async searchReceipt(ctx: Context) {
         let query = {};
         let page = ctx.params.page;
@@ -96,7 +101,7 @@ export class PurchaseController extends Service {
     async apple(ctx: Context) {
         let receipt = ctx.params.receipt;
         let userId = ctx.params.userId;
-        await this.receiptModel.insertMany({ type: 'received', receipt: receipt, userId: ctx.params.userId });
+        await this.receiptModel.insertMany({ createTime: moment().unix(), updateTime: moment().unix(), type: 'received', receipt: receipt, userId: ctx.params.userId });
         let findResult = await this.receiptModel.find({ receipt: receipt, type: 'apple' }).exec();
         // if (findResult && findResult.length > 0) {
         //     if (findResult.userId.toString() !== userId) {
@@ -106,10 +111,12 @@ export class PurchaseController extends Service {
         //     //     throw new Error('you already commit this receipt and already validate')
         //     // }
         // }
+        let isProcessed = false;
         for (let res of findResult) {
             if (res.userId.toString() !== userId) {
                 throw new Error('other user already had this receipt');
             }
+            isProcessed = isProcessed || res.isProcessed
         }
         iap.config({ applePassword: process.env.APPLE_SHARED_SECRECT || '' });
         await iap.setup();
@@ -119,17 +126,21 @@ export class PurchaseController extends Service {
         let isCanceled = await Promise.all(purchaseData.map(data => iap.isCanceled(data)));
         let isExpired = await Promise.all(purchaseData.map(data => iap.isExpired(data)));
         let purchaseRecord = await this.receiptModel.insertMany({
+            createTime: moment().unix(),
+            updateTime: moment().unix(),
             type: 'apple',
             userId: ctx.params.userId,
             receipt: receipt,
             validateData: JSON.stringify(validateData),
-            purchaseData: JSON.stringify(purchaseData)
+            purchaseData: JSON.stringify(purchaseData),
+            isProcessed: isProcessed
         });
         return {
             isValidated: isValidated,
             isCanceled: isCanceled,
             isExpired: isExpired,
-            purchaseRecord: purchaseRecord
+            purchaseRecord: purchaseRecord[0],
+            isProcessed: isProcessed
         };
     }
 }

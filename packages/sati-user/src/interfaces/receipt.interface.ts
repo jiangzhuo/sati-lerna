@@ -6,4 +6,7 @@ export interface Receipt extends Document {
     readonly userId: string,
     readonly validateData: string,
     readonly purchaseData: string,
+    readonly isProcessed: boolean
+    readonly createTime: number
+    readonly updateTime: number
 }

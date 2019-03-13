@@ -20,7 +20,6 @@ export class DownloadController {
     async download(@Req() req, @Res() res, @Param('type') type, @Param('resourceId') resourceId, @Param('fileName') fileName) {
         // throw new Error('what the fuck')
         let user = await this.authService.validateUser(req);
-        console.log({ user });
         // const stsClient = new Core({
         //     accessKeyId: process.env.STS_ACCESS_KEY_ID || 'LTAIhIOInA2pDmga',
         //     accessKeySecret: process.env.STS_ACCESS_KEY_SECRET || '9FNpKB1WZpEwxWJbiWSMiCfuy3E3TL',
@@ -40,8 +39,6 @@ export class DownloadController {
         // todo 先验证一下是否有权限下载这个资源
         // 请求的地址类似于https://sati.danmaku.cn/download/<type>/<resourceId>/<fileName>
         // const [type, resourceId, filename] = fileName.split('/');
-        console.log(type, fileName, resourceId);
-        console.log(this.resourceBroker)
         let getRecordMethod = '';
         let getResourceMethod = '';
         let idParName = '';
@@ -102,7 +99,6 @@ export class DownloadController {
                     userId: userId,
                     [idParName]: resourceId,
                 });
-                console.log(recordData, resourceData);
                 if (recordData.price === 0) {
                     haveAccess = true;
                 }

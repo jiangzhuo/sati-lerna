@@ -28,8 +28,9 @@ export class PurchaseResolver {
 
     @Query('appleValidate')
     async appleValidate(req, body, context) {
+        const isRevalidate = !!body.userId;
         const appleValidateRes = await this.userBroker.call('purchase.apple', {
-            userId: context.user.id,
+            userId: body.userId || context.user.id,
             receipt: body.receipt
         }, {
             meta: {
@@ -41,6 +42,58 @@ export class PurchaseResolver {
         // 判断appleValidateRes然后做点什么
         if (appleValidateRes.isValidated) {
             // 验证过了的话，要不要给加上对应的钱
+            // let purchaseData = [{
+            //     "bundleId": "com.mindmobapp.MindMob",
+            //     "appItemId": "521129812",
+            //     "originalTransactionId": "1000000046178817",
+            //     "transactionId": "1000000046178817",
+            //     "productId": "com.mindmobapp.download",
+            //     "originalPurchaseDate": "1335798355868",
+            //     "purchaseDate": "1335798355868",
+            //     "quantity": 1,
+            //     "expirationDate": 0,
+            //     "isTrial": false,
+            //     "cancellationDate": 0
+            // }];
+            // let validateData = {
+            //     "receipt": {
+            //         "original_purchase_date_pst": "2012-04-30 08:05:55 America/Los_Angeles",
+            //         "original_transaction_id": "1000000046178817",
+            //         "original_purchase_date_ms": "1335798355868",
+            //         "transaction_id": "1000000046178817",
+            //         "quantity": "1",
+            //         "product_id": "com.mindmobapp.download",
+            //         "bvrs": "20120427",
+            //         "purchase_date_ms": "1335798355868",
+            //         "purchase_date": "2012-04-30 15:05:55 Etc/GMT",
+            //         "original_purchase_date": "2012-04-30 15:05:55 Etc/GMT",
+            //         "purchase_date_pst": "2012-04-30 08:05:55 America/Los_Angeles",
+            //         "bid": "com.mindmobapp.MindMob",
+            //         "item_id": "521129812"
+            //     },
+            //     "status": 0,
+            //     "sandbox": true,
+            //     "service": "apple"
+            // }
+            const validateData = JSON.parse(appleValidateRes.purchaseRecord.validateData);
+            const purchaseData = await this.userBroker.call('purchase.getPurchaseByProductId', { productId: validateData.receipt.product_id });
+            if (purchaseData && purchaseData.bundleId === validateData.receipt.bid && purchaseData.productId === validateData.receipt.product_id) {
+                if (!appleValidateRes.isProcessed) {
+                    await this.userBroker.call('user.changeBalance', {
+                        id: body.userId || context.user.id,
+                        changeValue: purchaseData.price * 100,
+                        type: 'changeByIAP',
+                        extraInfo: JSON.stringify({
+                            operatorId: context.user.id,
+                            operatorExtraInfo: body.extraInfo,
+                            validateData: appleValidateRes,
+                            purchaseData: purchaseData
+                        }),
+                    });
+                }
+            } else {
+                throw new Error('no purchase')
+            }
         }
         return { code: 200, message: 'success', data: appleValidateRes };
     }

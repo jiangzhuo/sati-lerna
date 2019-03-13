@@ -75,7 +75,10 @@ type Receipt {
     userId: String,
     receipt: String,
     purchaseData: String,
-    validateData: String
+    validateData: String,
+    isProcessed: Boolean,
+    createTime: Int
+    updateTime: Int
 }
 
 type Purchase {
@@ -89,7 +92,12 @@ type Purchase {
 }
 
 type AppleValidateResponseData {
+    "之前是否处理过这个人同样的收据了"
+    isProcessed: Boolean,
+    "是否是个合法收据"
     isValidated: Boolean,
+    "是否取消了，好像只有订阅有这个"
     isCanceled: [Boolean],
+    "是否过期了，好像只有订阅有这个"
     isExpired: [Boolean]
 }

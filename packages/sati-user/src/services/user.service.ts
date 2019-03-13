@@ -14,12 +14,14 @@ import { ObjectId } from 'bson';
 import * as moment from 'moment';
 import { Errors } from 'moleculer';
 import MoleculerError = Errors.MoleculerError;
+import { Receipt } from 'src/interfaces/receipt.interface';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectModel('User') private readonly userModel: Model<User>,
         @InjectModel('Account') private readonly accountModel: Model<Account>,
+        @InjectModel('Receipt') private readonly receiptModel: Model<Receipt>,
         @Inject(CryptoUtil) private readonly cryptoUtil: CryptoUtil,
         @Inject(forwardRef(() => AuthService)) private readonly authService: AuthService
     ) { }
@@ -125,7 +127,6 @@ export class UserService {
             _id: id,
             balance: { $gte: -1 * changeValue }
         }, { $inc: { balance: changeValue } }, { new: true }).exec();
-        // if (!user) throw new RpcException({ code: 402, message: t('not enough balance') });
         if (!user) throw new MoleculerError('not enough balance', 402);
         await this.accountModel.create({
             userId: id,
@@ -135,6 +136,18 @@ export class UserService {
             createTime: moment().unix(),
             extraInfo: extraInfo,
         });
+        if (type === 'changeByIAP') {
+            let extraInfoJSON = JSON.parse(extraInfo);
+            let receiptId = extraInfoJSON.validateData.purchaseRecord.id;
+            let receipt = await this.receiptModel.findOneAndUpdate({ _id: receiptId }, {
+                isProcessed: true,
+                updateTime: moment().unix()
+            }).exec();
+            let res = await this.receiptModel.updateMany({ receipt: receipt.receipt }, {
+                isProcessed: true,
+                updateTime: moment().unix()
+            }).exec();
+        }
         return user
     }
 
