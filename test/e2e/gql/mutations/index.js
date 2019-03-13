@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+module.exports.createPurchase = fs.readFileSync(path.join(__dirname, 'createPurchase.gql'), 'utf8');
+module.exports.deletePurchase = fs.readFileSync(path.join(__dirname, 'deletePurchase.gql'), 'utf8');
 module.exports.createMindfulness = fs.readFileSync(path.join(__dirname, 'createMindfulness.gql'), 'utf8');
 module.exports.updateMindfulness = fs.readFileSync(path.join(__dirname, 'updateMindfulness.gql'), 'utf8');
 module.exports.deleteMindfulness = fs.readFileSync(path.join(__dirname, 'deleteMindfulness.gql'), 'utf8');

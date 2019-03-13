@@ -5,6 +5,7 @@ module.exports.sayHello = fs.readFileSync(path.join(__dirname, 'sayHello.gql'), 
 module.exports.sayPurchaseHello = fs.readFileSync(path.join(__dirname, 'sayPurchaseHello.gql'), 'utf8');
 module.exports.appleValidate = fs.readFileSync(path.join(__dirname, 'appleValidate.gql'), 'utf8');
 module.exports.searchReceipt = fs.readFileSync(path.join(__dirname, 'searchReceipt.gql'), 'utf8');
+module.exports.searchPurchase = fs.readFileSync(path.join(__dirname, 'searchPurchase.gql'), 'utf8');
 module.exports.getMindfulness = fs.readFileSync(path.join(__dirname, 'getMindfulness.gql'), 'utf8');
 module.exports.getMindfulnessById = fs.readFileSync(path.join(__dirname, 'getMindfulnessById.gql'), 'utf8');
 module.exports.getMindfulnessByIds = fs.readFileSync(path.join(__dirname, 'getMindfulnessByIds.gql'), 'utf8');

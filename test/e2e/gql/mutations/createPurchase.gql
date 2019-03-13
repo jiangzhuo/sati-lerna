@@ -1,0 +1,15 @@
+mutation createPurchase($data: createPurchaseRequest!){
+    createPurchase(data: $data){
+        code
+        message
+        data{
+            id
+            type
+            bundleId
+            productId
+            price
+            createTime
+            updateTime
+        }
+    }
+}

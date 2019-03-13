@@ -36,25 +36,6 @@ input createPurchaseRequest {
     updateTime: Int
 }
 
-input createHomeRequest {
-    "类型 mindfulness/nature/wander/wanderAlbum/shop"
-    type :String
-    "类型对应的资源的id mindfulnessId/natureId/wanderId/wanderAlbumId/shopId"
-    resourceId :String
-    "首页这一项显示的背景图片"
-    background : [String]
-    "名称 上面短的那行字"
-    name :String
-    "描述 下面长的那行字"
-    description :String
-    "作者的id"
-    author :String
-    "顺序id"
-    position :Int
-    "生效日期，从什么时候开始生效"
-    validTime: Int
-}
-
 type HelloPurchaseResponse {
     code: Int
     message: String

@@ -68,6 +68,9 @@ export class PurchaseController extends Service {
 
     async createPurchase(ctx: Context) {
         let data = ctx.params;
+        if (!["appleConsumable", "appleNonConsumable", "appleAutoRenewableSubscription", "appleNonRenewingSubscription"].includes(data.type)) {
+            throw new Error('wrong iap type')
+        }
         data.createTime = moment().unix();
         data.updateTime = moment().unix();
         return await this.purchaseModel.create(data)

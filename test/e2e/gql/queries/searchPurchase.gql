@@ -1,0 +1,18 @@
+query searchPurchase($type: String, $page: Int, $limit: Int){
+    searchPurchase(type: $type, page: $page, limit: $limit){
+        code
+        message
+        data{
+            total
+            data{
+                id
+                type
+                bundleId
+                productId
+                price
+                createTime
+                updateTime
+            }
+        }
+    }
+}

@@ -1,0 +1,15 @@
+mutation deletePurchase($id: String!){
+    deletePurchase(id: $id){
+        code
+        message
+        data{
+            id
+            type
+            bundleId
+            productId
+            price
+            createTime
+            updateTime
+        }
+    }
+}
