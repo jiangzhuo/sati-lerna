@@ -6,7 +6,7 @@ const { Test } = require("@nestjs/testing");
 const mutations = require('./gql/mutations');
 const queries = require('./gql/queries');
 
-describe('Resource', () => {
+describe.skip('Resource', () => {
     let app: INestApplication;
     let adminToken;
     beforeAll(async () => {
@@ -2437,7 +2437,6 @@ describe('Resource', () => {
                         before: Math.floor(Date.now() / 1000) + 100000
                     }
                 });
-            console.log(res.text)
             expect(JSON.parse(res.text).data.getHome.data.length).toBe(3);
             res = await supertest(app.getHttpServer())
                 .post('/graphql')

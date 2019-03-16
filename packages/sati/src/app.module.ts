@@ -10,6 +10,7 @@ import { ResourceModule } from './modules/resource/resource.module';
 import { StatsModule } from './modules/stats/stats.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { DownloadModule } from './modules/download/download.module';
+import { IAPModule } from './modules/iap/iap.module';
 import { PurchaseModule } from './modules/purchase/purchase.module';
 
 
@@ -25,6 +26,7 @@ import { PurchaseModule } from './modules/purchase/purchase.module';
         StatsModule,
         UserModule,
         PurchaseModule,
+        IAPModule
     ],
     providers: [
         {

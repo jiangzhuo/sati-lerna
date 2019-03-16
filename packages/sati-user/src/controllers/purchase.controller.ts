@@ -34,7 +34,8 @@ export class PurchaseController extends Service {
                 searchPurchase: this.searchPurchase,
                 createPurchase: this.createPurchase,
                 deletePurchase: this.deletePurchase,
-                getPurchaseByProductId: this.getPurchaseByProductId
+                getPurchaseByProductId: this.getPurchaseByProductId,
+                appleSubscription: this.appleSubscription
             },
             created: this.serviceCreated,
             started: this.serviceStarted,
@@ -89,6 +90,15 @@ export class PurchaseController extends Service {
         let query = {};
         let page = ctx.params.page;
         let limit = ctx.params.limit;
+        let keyword = ctx.params.keyword;
+        if (!isEmpty(keyword)) {
+            let { data } = await this.broker.call('user.searchUser', {
+                keyword: keyword,
+                page: 1,
+                limit: 100
+            });
+            query['userId'] = { $in: data.map(item => item.id) }
+        }
         // 构建条件搜索purchase
         if (!isEmpty(ctx.params.type)) {
             query['type'] = ctx.params.type;
@@ -98,10 +108,22 @@ export class PurchaseController extends Service {
         return { total, data }
     }
 
+    async appleSubscription(ctx: Context) {
+        // apple文档 https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/StoreKitGuide/Chapters/Subscriptions.html#//apple_ref/doc/uid/TP40008267-CH7-SW13
+        let data = ctx.params;
+        await this.receiptModel.insertMany({
+            createTime: moment().unix(),
+            updateTime: moment().unix(),
+            type: 'appleSubscriptionReceived',
+            receipt: JSON.stringify(data),
+            userId: '000000000000000000000000'
+        });
+    }
+
     async apple(ctx: Context) {
         let receipt = ctx.params.receipt;
         let userId = ctx.params.userId;
-        await this.receiptModel.insertMany({ createTime: moment().unix(), updateTime: moment().unix(), type: 'received', receipt: receipt, userId: ctx.params.userId });
+        await this.receiptModel.insertMany({ createTime: moment().unix(), updateTime: moment().unix(), type: 'appleReceived', receipt: receipt, userId: ctx.params.userId });
         let findResult = await this.receiptModel.find({ receipt: receipt, type: 'apple' }).exec();
         // if (findResult && findResult.length > 0) {
         //     if (findResult.userId.toString() !== userId) {

@@ -11,6 +11,9 @@ query searchReceipt($type: String, $page: Int, $limit: Int){
                 receipt
                 purchaseData
                 validateData
+                isProcessed
+                createTime
+                updateTime
             }
         }
     }

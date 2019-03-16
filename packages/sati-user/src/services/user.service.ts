@@ -14,7 +14,7 @@ import { ObjectId } from 'bson';
 import * as moment from 'moment';
 import { Errors } from 'moleculer';
 import MoleculerError = Errors.MoleculerError;
-import { Receipt } from 'src/interfaces/receipt.interface';
+import { Receipt } from '../interfaces/receipt.interface';
 
 @Injectable()
 export class UserService {

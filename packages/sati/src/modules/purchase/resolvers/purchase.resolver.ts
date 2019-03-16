@@ -27,8 +27,8 @@ export class PurchaseResolver {
     }
 
     @Query('appleValidate')
-    async appleValidate(req, body, context) {
-        const isRevalidate = !!body.userId;
+    async appleValidate(req, body, context, resolveInfo) {
+        const isReValidate = !!body.userId;
         const appleValidateRes = await this.userBroker.call('purchase.apple', {
             userId: body.userId || context.user.id,
             receipt: body.receipt
@@ -95,6 +95,9 @@ export class PurchaseResolver {
                 throw new Error('no purchase')
             }
         }
+        if(isReValidate){
+            this.logger.log(`${context.user && context.user.id}\t${context.udid}\t${context.clientIp}\t${context.operationName}\t${resolveInfo.fieldName}\t${JSON.stringify(appleValidateRes)}`);
+        }
         return { code: 200, message: 'success', data: appleValidateRes };
     }
 
@@ -105,6 +108,7 @@ export class PurchaseResolver {
             type: body.type,
             page: body.page,
             limit: body.limit,
+            keyword: body.keyword
         }, {
             meta: {
                 udid: context.udid,
@@ -112,10 +116,6 @@ export class PurchaseResolver {
                 clientIp: context.clientIp,
             },
         });
-        // 判断appleValidateRes然后做点什么
-        if (appleValidateRes.isValidated) {
-            // 验证过了的话，要不要给加上对应的钱
-        }
         return { code: 200, message: 'success', data: appleValidateRes };
     }
 

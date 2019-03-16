@@ -3,7 +3,7 @@ type Query {
     "苹果验证"
     appleValidate(userId: String, receipt: String): AppleValidateResponse
     "搜索收据"
-    searchReceipt(type: String, page: Int, limit: Int): SearchReceiptResponse
+    searchReceipt(type: String, page: Int, limit: Int, keyword: String): SearchReceiptResponse
     "搜索内购设置"
     searchPurchase(type: String, page: Int, limit: Int): SearchPurchaseResponse
 }

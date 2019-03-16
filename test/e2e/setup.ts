@@ -105,6 +105,7 @@ module.exports = async (context) => {
         "status": 0,
         "balance": 0.0
     });
+
     con.close();
     //
     // const { AppModule } = require('../../packages/sati/src/app.module');

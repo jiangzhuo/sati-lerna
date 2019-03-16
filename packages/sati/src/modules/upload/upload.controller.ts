@@ -25,7 +25,7 @@ export class UploadController {
         });
         const fileName = `${hasha(file.buffer, { algorithm: 'md5' })}.${getExtension(file.mimetype)}`;
         const filename = `test/${fileName}`;
-        await client.put(filename, file.buffer);
+        let res = await client.put(filename, file.buffer);
         return { code: 200, message: 'upload avatar success', data: fileName };
     }
 

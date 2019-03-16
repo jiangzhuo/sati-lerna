@@ -3,6 +3,7 @@ query appleValidate($userId: String, $receipt: String){
         code
         message
         data{
+            isProcessed
             isValidated
             isCanceled
             isExpired
