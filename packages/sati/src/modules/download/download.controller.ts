@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Res, Req } from '@nestjs/common';
+import { Controller, Get, Param, Res, Req, UseInterceptors } from '@nestjs/common';
 import * as OSS from 'ali-oss';
 import { ServiceBroker } from "moleculer";
 import { InjectBroker } from 'nestjs-moleculer';
 import { AuthService } from '../user/auth/auth.service';
+import { ErrorsInterceptor } from '../../common/interceptors';
 
 // import { Configurable, ConfigParam, ConfigService } from 'nestjs-config';
 

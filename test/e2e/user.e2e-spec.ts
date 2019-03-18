@@ -7,7 +7,7 @@ import { ServiceBroker } from 'moleculer';
 const mutations = require('./gql/mutations');
 const queries = require('./gql/queries');
 
-describe.skip('User', () => {
+describe('User', () => {
     let app: INestApplication;
 
     beforeAll(async () => {

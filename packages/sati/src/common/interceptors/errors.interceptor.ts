@@ -27,7 +27,7 @@ export class ErrorsInterceptor implements NestInterceptor {
                 code = 500;
                 message = error.message || 'unknow error';
                 this.logger.error(`${code}\t${message}`);
-                // return throwError(new HttpException(message, code))
+                return throwError(new HttpException(message, code))
             }
             return Promise.resolve({
                 code,

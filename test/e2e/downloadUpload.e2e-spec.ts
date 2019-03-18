@@ -8,7 +8,7 @@ jest.mock('../../packages/sati/node_modules/ali-oss');
 // const mutations = require('./gql/mutations');
 const queries = require('./gql/queries');
 
-describe.only('Upload/Download', () => {
+describe('Upload/Download', () => {
     let app: INestApplication;
 
     let adminToken;
@@ -108,6 +108,22 @@ describe.only('Upload/Download', () => {
                 .get(`/download/${type}/${resourceId}/${fileName}`)
                 .set('Authorization', `Bearer ${adminToken}`);
             expect(res.status).toBe(302);
+        });
+
+        it(`download-no-type`, async () => {
+            let type = 'notype';
+            let resourceId = '000000000000000000000000';
+            let fileName = '93b8409840e31189b3f5e47da7ff7f93.json';
+            const res = await supertest(app.getHttpServer())
+                .get(`/download/${type}/${resourceId}/${fileName}`)
+                .set('Authorization', `Bearer ${adminToken}`);
+            expect(res.status).toBe(500);
+        });
+
+        it.todo(`download-resource`, async () => {
+        });
+
+        it.todo(`download-price-free`, async () => {
         });
     });
 });

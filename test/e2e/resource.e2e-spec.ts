@@ -6,7 +6,7 @@ const { Test } = require("@nestjs/testing");
 const mutations = require('./gql/mutations');
 const queries = require('./gql/queries');
 
-describe.skip('Resource', () => {
+describe('Resource', () => {
     let app: INestApplication;
     let adminToken;
     beforeAll(async () => {
