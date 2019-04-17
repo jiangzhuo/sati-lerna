@@ -1,0 +1,4 @@
+https://github.com/nats-io/nats-operator
+kubectl apply -f https://github.com/nats-io/nats-operator/releases/download/v0.4.4/00-prereqs.yaml
+kubectl apply -f https://github.com/nats-io/nats-operator/releases/download/v0.4.4/10-deployment.yaml
+kubectl get crd

@@ -1,0 +1,128 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sati
+spec:
+  selector:
+    app: sati
+  ports:
+  - protocol: "TCP"
+    name: "https"
+    port: 443
+    targetPort: 80
+  - protocol: "TCP"
+    name: "http"
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sati-user
+spec:
+  selector:
+    app: sati-user
+  clusterIP: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sati-resource
+spec:
+  selector:
+    app: sati-resource
+  clusterIP: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sati-stats
+spec:
+  selector:
+    app: sati-stats
+  clusterIP: None
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: sati
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sati
+    spec:
+      containers:
+      - image: tutum/hello-world
+        name: sati
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: sati-user
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sati-user
+    spec:
+      containers:
+      - image: tutum/hello-world
+        name: sati-user
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: sati-resource
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sati-resource
+    spec:
+      containers:
+      - image: tutum/hello-world
+        name: sati-resource
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: sati-stats
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sati-stats
+    spec:
+      containers:
+      - image: tutum/hello-world
+        name: sati-stats
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10

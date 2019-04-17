@@ -1,0 +1,3 @@
+https://github.com/nacos-group/nacos-k8s
+kubectl create -f deploy/nfs/rbac.yaml
+kubectl create -f deploy/nfs/deployment.yaml
